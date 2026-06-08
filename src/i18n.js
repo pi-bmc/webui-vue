@@ -149,6 +149,9 @@ export function getRoutePageTitle(route, t, te, fallback = '') {
 }
 
 const envName = import.meta.env.VITE_ENV_NAME;
-// Get default locale from local storage
-const stored = window.localStorage.getItem('storedLanguage');
+// Get default locale from local storage (guard for non-browser/test environments)
+const stored =
+  typeof window !== 'undefined' && window.localStorage
+    ? window.localStorage.getItem('storedLanguage')
+    : null;
 export default createI18nInstance(envName, stored);

@@ -76,7 +76,7 @@ import TableRowAction from '@/components/Global/TableRowAction';
 import ModalIpv4 from './ModalIpv4.vue';
 import { mapState } from 'vuex';
 import i18n from '@/i18n';
-import { useModal } from 'bootstrap-vue-next';
+import { useModal } from '@/components/Bootstrap/useModal';
 
 export default {
   name: 'Ipv4Table',

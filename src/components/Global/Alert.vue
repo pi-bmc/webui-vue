@@ -24,7 +24,7 @@
 
 <script>
 import StatusIcon from '@/components/Global/StatusIcon';
-import { BAlert } from 'bootstrap-vue-next';
+import BAlert from '@/components/Bootstrap/BAlert.vue';
 
 export default {
   name: 'Alert',

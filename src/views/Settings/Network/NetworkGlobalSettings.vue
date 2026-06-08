@@ -134,7 +134,7 @@ import IconEdit from '@carbon/icons-vue/es/edit/16';
 import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 import PageSection from '@/components/Global/PageSection';
 import { mapState } from 'vuex';
-import { useModal } from 'bootstrap-vue-next';
+import { useModal } from '@/components/Bootstrap/useModal';
 
 export default {
   name: 'GlobalNetworkSettings',

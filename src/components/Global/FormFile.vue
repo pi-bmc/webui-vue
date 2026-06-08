@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { BFormFile } from 'bootstrap-vue-next';
+import BFormFile from '@/components/Bootstrap/BFormFile.vue';
 import IconClose from '@carbon/icons-vue/es/close/20';
 
 export default {

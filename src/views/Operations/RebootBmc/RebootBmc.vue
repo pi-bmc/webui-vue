@@ -39,7 +39,7 @@ import PageSection from '@/components/Global/PageSection';
 import BVToastMixin from '@/components/Mixins/BVToastMixin';
 import LoadingBarMixin from '@/components/Mixins/LoadingBarMixin';
 import i18n from '@/i18n';
-import { useModal } from 'bootstrap-vue-next';
+import { useModal } from '@/components/Bootstrap/useModal';
 
 export default {
   name: 'RebootBmc',

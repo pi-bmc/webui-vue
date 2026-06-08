@@ -1,0 +1,50 @@
+@import 'tailwindcss';
+
+/* Scan the kit + views for utility classes used in templates */
+@source './../../components';
+@source './../../views';
+@source './../../layouts';
+
+/* -------------------------------------------------------------------------- */
+/* OpenBMC design tokens                                                       */
+/* -------------------------------------------------------------------------- */
+@theme {
+  /* Brand / theme colors (mirror src/assets/styles/bmc/helpers/_colors.scss) */
+  --color-primary: #2d60e5;
+  --color-secondary: #3f3f3f;
+  --color-success: #0a7d06;
+  --color-danger: #da1416;
+  --color-warning: #efc100;
+  --color-info: #2d60e5;
+  --color-light: #f4f4f4;
+  --color-dark: #161616;
+
+  --color-gray-100: #f4f4f4;
+  --color-gray-200: #e6e6e6;
+  --color-gray-300: #d8d8d8;
+  --color-gray-400: #cccccc;
+  --color-gray-500: #b3b3b3;
+  --color-gray-600: #999999;
+  --color-gray-700: #666666;
+  --color-gray-800: #3f3f3f;
+  --color-gray-900: #161616;
+
+  /* Layout tokens */
+  --spacing-header: 48px;
+  --spacing-nav: 300px;
+
+  /* OpenBMC disables rounded corners globally */
+  --radius-none: 0;
+  --default-border-radius: 0;
+
+  /* Carbon-derived motion */
+  --ease-productive: cubic-bezier(0.2, 0, 0.38, 0.9);
+  --ease-expressive: cubic-bezier(0.4, 0.14, 0.3, 1);
+}
+
+/* HeadlessUI overlays / transitions live above app chrome */
+@layer base {
+  [data-headlessui-state] {
+    outline: none;
+  }
+}

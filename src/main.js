@@ -1,6 +1,11 @@
 import { createApp } from 'vue';
 import { VueQueryPlugin } from '@tanstack/vue-query';
 
+// Global styles: Tailwind (preflight + tokens) first, then the OpenBMC
+// compatibility/custom layer so its overrides win the cascade.
+import './assets/styles/tailwind.css';
+import './assets/styles/_obmc-custom.scss';
+
 import App from './App.vue';
 import i18n from './i18n';
 
@@ -15,136 +20,12 @@ import store from './store';
 import eventBus from './eventBus';
 import { ToastPlugin } from './plugins/toast';
 
-import {
-  BButton,
-  BContainer,
-  BForm,
-  BFormGroup,
-  BFormInput,
-  BFormCheckboxGroup,
-  BInputGroup,
-  BInputGroupText,
-  BFormSelect,
-  BFormSelectOption,
-  BFormFile,
-  BFormCheckbox,
-  BFormRadioGroup,
-  BFormRadio,
-  BFormText,
-  BFormTextarea,
-  BFormTags,
-  BFormInvalidFeedback,
-  BTable,
-  BToast,
-  BModal,
-  BCloseButton,
-  BAlert,
-  BCard,
-  BCardHeader,
-  BCardBody,
-  BCardFooter,
-  BCardGroup,
-  BRow,
-  BCol,
-  BBadge,
-  BSpinner,
-  BDropdown,
-  BDropdownDivider,
-  BDropdownItem,
-  BNav,
-  BNavbar,
-  BNavbarBrand,
-  BNavbarNav,
-  BNavItem,
-  BNavbarToggle,
-  BCollapse,
-  BPagination,
-  BTooltip,
-  BPopover,
-  BProgress,
-  BProgressBar,
-  BOverlay,
-  BListGroup,
-  BListGroupItem,
-  BTabs,
-  BTab,
-  BLink,
-  BOrchestrator,
-  createBootstrap,
-  vBToggle,
-  vBTooltip,
-  vBPopover,
-  vBModal,
-} from 'bootstrap-vue-next';
+// Tailwind + HeadlessUI component kit (replaces bootstrap-vue-next)
+import BootstrapCompat from './components/Bootstrap';
 
 const app = createApp(App);
 
-// Note: We register only the components/directives we need
-
-// Use createBootstrap for all bootstrap-vue-next plugins in 0.40.7+
-app.use(createBootstrap());
-
-app.component('BButton', BButton);
-app.component('BBtn', BButton);
-app.component('BContainer', BContainer);
-app.component('BForm', BForm);
-app.component('BFormGroup', BFormGroup);
-app.component('BFormInput', BFormInput);
-app.component('BFormCheckboxGroup', BFormCheckboxGroup);
-app.component('BInputGroup', BInputGroup);
-app.component('BInputGroupText', BInputGroupText);
-app.component('BFormSelect', BFormSelect);
-app.component('BFormSelectOption', BFormSelectOption);
-app.component('BFormFile', BFormFile);
-app.component('BFormCheckbox', BFormCheckbox);
-app.component('BFormRadioGroup', BFormRadioGroup);
-app.component('BFormRadio', BFormRadio);
-app.component('BFormText', BFormText);
-app.component('BFormTextarea', BFormTextarea);
-app.component('BFormTags', BFormTags);
-app.component('BFormInvalidFeedback', BFormInvalidFeedback);
-app.component('BTable', BTable);
-app.component('BToast', BToast);
-app.component('BModal', BModal);
-app.component('BCloseButton', BCloseButton);
-app.component('BAlert', BAlert);
-app.component('BCard', BCard);
-app.component('BCardHeader', BCardHeader);
-app.component('BCardBody', BCardBody);
-app.component('BCardFooter', BCardFooter);
-app.component('BCardGroup', BCardGroup);
-app.component('BRow', BRow);
-app.component('BCol', BCol);
-app.component('BBadge', BBadge);
-app.component('BSpinner', BSpinner);
-app.component('BDropdown', BDropdown);
-app.component('BDropdownDivider', BDropdownDivider);
-app.component('BDropdownItem', BDropdownItem);
-app.component('BNav', BNav);
-app.component('BNavbar', BNavbar);
-app.component('BNavbarBrand', BNavbarBrand);
-app.component('BNavbarNav', BNavbarNav);
-app.component('BNavItem', BNavItem);
-app.component('BNavbarToggle', BNavbarToggle);
-app.component('BCollapse', BCollapse);
-app.component('BPagination', BPagination);
-app.component('BTooltip', BTooltip);
-app.component('BPopover', BPopover);
-app.component('BProgress', BProgress);
-app.component('BProgressBar', BProgressBar);
-app.component('BOverlay', BOverlay);
-app.component('BListGroup', BListGroup);
-app.component('BListGroupItem', BListGroupItem);
-app.component('BTabs', BTabs);
-app.component('BTab', BTab);
-app.component('BLink', BLink);
-app.component('BOrchestrator', BOrchestrator);
-
-// Register BootstrapVue Next directives used in templates
-app.directive('b-toggle', vBToggle);
-app.directive('b-tooltip', vBTooltip);
-app.directive('b-popover', vBPopover);
-app.directive('b-modal', vBModal);
+app.use(BootstrapCompat);
 
 app.use(i18n);
 app.use(router);

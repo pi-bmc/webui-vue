@@ -2,18 +2,18 @@
   <div id="app">
     <router-view />
     <confirm-modal />
-    <b-orchestrator />
+    <app-toaster />
   </div>
 </template>
 
 <script>
 import ConfirmModal from '@/components/Global/ConfirmModal.vue';
-import { BOrchestrator } from 'bootstrap-vue-next';
+import AppToaster from '@/components/Global/AppToaster.vue';
 import { getRoutePageTitle } from '@/i18n';
 
 export default {
   name: 'App',
-  components: { ConfirmModal, BOrchestrator },
+  components: { ConfirmModal, AppToaster },
   computed: {
     assetTag() {
       return '';
@@ -57,6 +57,3 @@ export default {
 };
 </script>
 
-<style lang="scss">
-@import '@/assets/styles/_obmc-custom';
-</style>

@@ -1,12 +1,20 @@
 /// <reference types="vitest" />
 import { defineConfig, loadEnv } from 'vite';
 import vue from '@vitejs/plugin-vue';
+import tailwindcss from '@tailwindcss/vite';
 import basicSsl from '@vitejs/plugin-basic-ssl';
 import svgLoader from 'vite-svg-loader';
-import viteCompression from 'vite-plugin-compression';
 import { fileURLToPath, URL } from 'node:url';
+import { createRequire } from 'node:module';
 import path from 'node:path';
 import fs from 'node:fs';
+
+// vite-plugin-compression ships a broken ESM build under newer Node versions;
+// load its CommonJS entry via require for interop.
+const require = createRequire(import.meta.url);
+const viteCompression =
+  require('vite-plugin-compression').default ||
+  require('vite-plugin-compression');
 
 // Plugin to resolve directory imports to index.js (like Webpack does)
 function resolveDirectoryIndex() {
@@ -57,14 +65,12 @@ export default defineConfig(({ mode }) => {
   const scssAdditionalData = (() => {
     if (hasCustomStyles && envName !== undefined) {
       return `
-        @import "@/assets/styles/bmc/helpers";
+        @import "@/assets/styles/helpers";
         @import "@/env/assets/styles/_${envName}";
-        @import "@/assets/styles/bootstrap/_helpers";
       `;
     } else {
       return `
-        @import "@/assets/styles/bmc/helpers";
-        @import "@/assets/styles/bootstrap/_helpers";
+        @import "@/assets/styles/helpers";
       `;
     }
   })();
@@ -121,6 +127,7 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       resolveDirectoryIndex(),
+      tailwindcss(),
       vue(),
       svgLoader({
         defaultImport: 'component',
@@ -141,6 +148,11 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         '@': fileURLToPath(new URL('./src', import.meta.url)),
+        // The installed vuex tarball is missing the esm-bundler/.mjs files its
+        // package.json `exports` point to; map to the present esm-browser build.
+        vuex: fileURLToPath(
+          new URL('./node_modules/vuex/dist/vuex.esm-browser.js', import.meta.url),
+        ),
         ...customAliases,
       },
       // Allow importing without extensions (like Vue CLI did)
@@ -154,12 +166,12 @@ export default defineConfig(({ mode }) => {
           // Silence Sass deprecation warnings from Bootstrap and other dependencies.
           // Bootstrap is working on a long-term fix for Dart Sass compatibility.
           // See: https://getbootstrap.com/docs/5.3/customize/sass/#importing
-          silenceDeprecations: ['import'],
+          silenceDeprecations: ['import', 'if-function', 'global-builtin', 'color-functions'],
           quietDeps: true,
         },
         sass: {
           additionalData: scssAdditionalData,
-          silenceDeprecations: ['import'],
+          silenceDeprecations: ['import', 'if-function', 'global-builtin', 'color-functions'],
           quietDeps: true,
         },
       },

@@ -179,7 +179,7 @@ import SearchFilterMixin, {
 import TableFilter from '@/components/Global/TableFilter';
 import TableFilterMixin from '@/components/Mixins/TableFilterMixin';
 import i18n from '@/i18n';
-import { useModal } from 'bootstrap-vue-next';
+import { useModal } from '@/components/Bootstrap/useModal';
 
 export default {
   components: {

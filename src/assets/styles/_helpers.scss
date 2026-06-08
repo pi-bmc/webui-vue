@@ -1,0 +1,203 @@
+// -----------------------------------------------------------------------------
+// Sass helper shim (Bootstrap-free)
+//
+// Provides the variables, functions and mixins that the project's scoped
+// `<style lang="scss">` blocks and custom partials relied on Bootstrap to
+// supply. This file is injected globally via vite.config.js `additionalData`,
+// so it must not emit any CSS — only declarations.
+// -----------------------------------------------------------------------------
+
+@use 'sass:math';
+@use 'sass:map';
+@use 'sass:color';
+@use 'sass:list';
+
+// -----------------------------------------------------------------------------
+// Colors
+// -----------------------------------------------------------------------------
+@import './bmc/helpers/colors';
+@import './bmc/helpers/motion';
+
+// -----------------------------------------------------------------------------
+// Core variables (Bootstrap defaults the project depends on)
+// -----------------------------------------------------------------------------
+$spacer: 1rem !default;
+$enable-rounded: false !default;
+$border-radius: 0 !default;
+
+$font-size-base: 1rem !default;
+$headings-font-weight: 500 !default;
+$h1-font-size: $font-size-base * 2.5 !default;
+$h2-font-size: $font-size-base * 2 !default;
+$h3-font-size: $font-size-base * 1.75 !default;
+$h4-font-size: $font-size-base * 1.5 !default;
+$h5-font-size: $font-size-base * 1.25 !default;
+$h6-font-size: $font-size-base !default;
+
+// z-index scale (Bootstrap 5 defaults)
+$zindex-dropdown: 1000 !default;
+$zindex-sticky: 1020 !default;
+$zindex-fixed: 1030 !default;
+$zindex-offcanvas: 1045 !default;
+$zindex-modal-backdrop: 1050 !default;
+$zindex-modal: 1055 !default;
+$zindex-popover: 1070 !default;
+$zindex-tooltip: 1080 !default;
+$zindex-toast: 1090 !default;
+
+// Transitions
+$transition-base: all 0.2s ease-in-out !default;
+$transition-fade: opacity 0.15s linear !default;
+
+// Borders / misc Bootstrap compatibility variables
+$border-color: $gray-300 !default;
+$btn-focus-box-shadow: 0 0 0 0.25rem rgba($blue, 0.5) !default;
+$form-switch-border-radius: 2em !default;
+$component-active-bg: $primary !default;
+$input-btn-padding-y: 0.375rem !default;
+$input-btn-padding-x: 0.75rem !default;
+
+// Table cell padding (Bootstrap defaults)
+$table-cell-padding-x: 0.5rem !default;
+$table-cell-padding-y: 0.5rem !default;
+
+// Grid breakpoints (Bootstrap 5 defaults)
+$grid-breakpoints: (
+    xs: 0,
+    sm: 576px,
+    md: 768px,
+    lg: 992px,
+    xl: 1200px,
+    xxl: 1400px,
+) !default;
+
+// -----------------------------------------------------------------------------
+// Project custom variables
+// -----------------------------------------------------------------------------
+@import './bmc/helpers/variables';
+
+// -----------------------------------------------------------------------------
+// Color manipulation functions (replace Bootstrap's tint/shade/shift)
+// -----------------------------------------------------------------------------
+@function tint-color($color, $weight) {
+    @return color.mix(white, $color, $weight);
+}
+
+@function shade-color($color, $weight) {
+    @return color.mix(black, $color, $weight);
+}
+
+@function shift-color($color, $weight) {
+    @if $weight > 0 {
+        @return shade-color($color, $weight);
+    } @else {
+        @return tint-color($color, -$weight);
+    }
+}
+
+@function theme-color($variant) {
+    @return map.get($theme-colors, $variant);
+}
+
+@function theme-color-light($variant) {
+    @return shift-color(map.get($theme-colors, $variant), -90.4%);
+}
+
+@function theme-color-dark($variant) {
+    @return shift-color(map.get($theme-colors, $variant), 16%);
+}
+
+// Bootstrap 4 compatibility: theme-color-level()
+// Positive levels darken (mix with black), negative levels lighten (mix white)
+@function theme-color-level($variant, $level: 0) {
+    $color: map.get($theme-colors, $variant);
+    $weight: $level * 8%;
+    @if $level > 0 {
+        @return shade-color($color, $weight);
+    } @else if $level < 0 {
+        @return tint-color($color, math.abs($weight));
+    } @else {
+        @return $color;
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Breakpoint helpers (subset of Bootstrap's responsive mixins)
+// -----------------------------------------------------------------------------
+@function breakpoint-min($name, $breakpoints: $grid-breakpoints) {
+    $min: map.get($breakpoints, $name);
+    @return if($min != 0, $min, null);
+}
+
+@function breakpoint-next($name, $breakpoints: $grid-breakpoints) {
+    $names: map.keys($breakpoints);
+    $n: list.index($names, $name);
+    @if not $n {
+        @error "breakpoint `#{$name}` not found in `#{$breakpoints}`";
+    }
+    @return if($n < length($names), list.nth($names, $n + 1), null);
+}
+
+@function breakpoint-max($name, $breakpoints: $grid-breakpoints) {
+    $next: breakpoint-next($name, $breakpoints);
+    @return if($next, breakpoint-min($next, $breakpoints) - 0.02px, null);
+}
+
+@mixin media-breakpoint-up($name, $breakpoints: $grid-breakpoints) {
+    $min: breakpoint-min($name, $breakpoints);
+    @if $min {
+        @media (min-width: $min) {
+            @content;
+        }
+    } @else {
+        @content;
+    }
+}
+
+@mixin media-breakpoint-down($name, $breakpoints: $grid-breakpoints) {
+    $max: breakpoint-max($name, $breakpoints);
+    @if $max {
+        @media (max-width: $max) {
+            @content;
+        }
+    } @else {
+        @content;
+    }
+}
+
+@mixin media-breakpoint-only($name, $breakpoints: $grid-breakpoints) {
+    $min: breakpoint-min($name, $breakpoints);
+    $max: breakpoint-max($name, $breakpoints);
+    @if $min != null and $max != null {
+        @media (min-width: $min) and (max-width: $max) {
+            @content;
+        }
+    } @else if $max == null {
+        @include media-breakpoint-up($name, $breakpoints) {
+            @content;
+        }
+    } @else if $min == null {
+        @include media-breakpoint-down($name, $breakpoints) {
+            @content;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Utility mixins
+// -----------------------------------------------------------------------------
+@mixin visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+@mixin font-size($size) {
+    font-size: $size;
+}

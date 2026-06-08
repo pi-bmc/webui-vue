@@ -1,0 +1,1190 @@
+// -----------------------------------------------------------------------------
+// Bootstrap compatibility base (Bootstrap-free)
+//
+// Re-creates the subset of Bootstrap's CSS class names that the existing markup
+// and the OpenBMC custom partials depend on (grid, spacing/flex/display
+// utilities, buttons, forms, tables, cards, badges, alerts, modal, dropdown,
+// nav/navbar, pagination, progress, spinner, toast). Authored on top of the
+// project's own Sass helpers so the `bootstrap` npm package can be removed.
+//
+// The OpenBMC custom partials (`bmc/custom/*`) layer their look on top of these
+// base rules, exactly as they previously layered on Bootstrap.
+// -----------------------------------------------------------------------------
+
+@use 'sass:math';
+@use 'sass:map';
+@use 'sass:list';
+
+$spacers: (
+    0: 0,
+    1: calc(#{$spacer} * 0.25),
+    2: calc(#{$spacer} * 0.5),
+    3: $spacer,
+    4: calc(#{$spacer} * 1.5),
+    5: calc(#{$spacer} * 3),
+);
+
+$breakpoint-names: map.keys($grid-breakpoints);
+
+// -----------------------------------------------------------------------------
+// Reboot essentials (Tailwind preflight covers most; add Bootstrap-isms)
+// -----------------------------------------------------------------------------
+body {
+    font-family:
+        system-ui,
+        -apple-system,
+        'Segoe UI',
+        Roboto,
+        'Helvetica Neue',
+        Arial,
+        sans-serif;
+    font-size: $font-size-base;
+    line-height: 1.5;
+    color: $gray-900;
+    background-color: $white;
+}
+
+// -----------------------------------------------------------------------------
+// Grid: container / row / col
+// -----------------------------------------------------------------------------
+.container,
+.container-fluid,
+.container-sm,
+.container-md,
+.container-lg,
+.container-xl,
+.container-xxl {
+    width: 100%;
+    padding-inline: calc(#{$spacer} * 0.75);
+    margin-inline: auto;
+}
+
+$container-max-widths: (
+    sm: 540px,
+    md: 720px,
+    lg: 960px,
+    xl: 1140px,
+    xxl: 1320px,
+);
+@each $bp, $width in $container-max-widths {
+    @include media-breakpoint-up($bp) {
+        .container,
+        .container-#{$bp} {
+            max-width: $width;
+        }
+    }
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-inline: calc(#{$spacer} * -0.75);
+
+    > * {
+        box-sizing: border-box;
+        flex-shrink: 0;
+        width: 100%;
+        max-width: 100%;
+        padding-inline: calc(#{$spacer} * 0.75);
+    }
+}
+
+@mixin col-base {
+    flex: 1 0 0%;
+}
+
+.col {
+    @include col-base;
+}
+.col-auto {
+    flex: 0 0 auto;
+    width: auto;
+}
+@for $i from 1 through 12 {
+    .col-#{$i} {
+        flex: 0 0 auto;
+        width: percentage(math.div($i, 12));
+    }
+}
+@each $bp in $breakpoint-names {
+    @include media-breakpoint-up($bp) {
+        $infix: if($bp == xs, '', '-#{$bp}');
+        .col#{$infix} {
+            @include col-base;
+        }
+        .col#{$infix}-auto {
+            flex: 0 0 auto;
+            width: auto;
+        }
+        @for $i from 1 through 12 {
+            .col#{$infix}-#{$i} {
+                flex: 0 0 auto;
+                width: percentage(math.div($i, 12));
+            }
+        }
+        @for $i from 0 through 11 {
+            .offset#{$infix}-#{$i} {
+                margin-inline-start: if(
+                    $i == 0,
+                    0,
+                    percentage(math.div($i, 12))
+                );
+            }
+        }
+    }
+}
+
+// Gutters
+@each $key, $val in $spacers {
+    .g-#{$key},
+    .gx-#{$key} {
+        --bs-gutter-x: #{$val};
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Spacing utilities (margin / padding), incl. logical s/e
+// -----------------------------------------------------------------------------
+$margin-sides: (
+    '': (
+        'margin',
+    ),
+    't': (
+        'margin-top',
+    ),
+    'b': (
+        'margin-bottom',
+    ),
+    's': (
+        'margin-inline-start',
+    ),
+    'e': (
+        'margin-inline-end',
+    ),
+);
+$padding-sides: (
+    '': (
+        'padding',
+    ),
+    't': (
+        'padding-top',
+    ),
+    'b': (
+        'padding-bottom',
+    ),
+    's': (
+        'padding-inline-start',
+    ),
+    'e': (
+        'padding-inline-end',
+    ),
+);
+
+@mixin make-spacing($prefix, $sides) {
+    @each $sideKey, $props in $sides {
+        @each $sizeKey, $sizeVal in $spacers {
+            .#{$prefix}#{$sideKey}-#{$sizeKey} {
+                @each $p in $props {
+                    #{$p}: $sizeVal !important;
+                }
+            }
+        }
+    }
+    // x / y axis
+    @each $sizeKey, $sizeVal in $spacers {
+        .#{$prefix}x-#{$sizeKey} {
+            #{if($prefix == 'm', 'margin-inline', 'padding-inline')}: $sizeVal !important;
+        }
+        .#{$prefix}y-#{$sizeKey} {
+            #{if($prefix == 'm', 'margin-block', 'padding-block')}: $sizeVal !important;
+        }
+    }
+}
+@include make-spacing('m', $margin-sides);
+@include make-spacing('p', $padding-sides);
+
+.m-auto {
+    margin: auto !important;
+}
+.ms-auto {
+    margin-inline-start: auto !important;
+}
+.me-auto {
+    margin-inline-end: auto !important;
+}
+.mx-auto {
+    margin-inline: auto !important;
+}
+
+// Responsive spacing variants actually used (ms-sm, m-md, mb-md)
+@each $bp in (sm, md, lg, xl) {
+    @include media-breakpoint-up($bp) {
+        @each $sizeKey, $sizeVal in $spacers {
+            .ms-#{$bp}-#{$sizeKey} {
+                margin-inline-start: $sizeVal !important;
+            }
+            .m-#{$bp}-#{$sizeKey} {
+                margin: $sizeVal !important;
+            }
+            .mb-#{$bp}-#{$sizeKey} {
+                margin-bottom: $sizeVal !important;
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Display utilities
+// -----------------------------------------------------------------------------
+$displays: none, inline, inline-block, block, flex, inline-flex, table,
+    table-cell;
+@each $d in $displays {
+    .d-#{$d} {
+        display: $d !important;
+    }
+}
+@each $bp in (sm, md, lg, xl) {
+    @include media-breakpoint-up($bp) {
+        @each $d in $displays {
+            .d-#{$bp}-#{$d} {
+                display: $d !important;
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Flex utilities
+// -----------------------------------------------------------------------------
+.flex-row {
+    flex-direction: row !important;
+}
+.flex-column {
+    flex-direction: column !important;
+}
+.flex-wrap {
+    flex-wrap: wrap !important;
+}
+.flex-nowrap {
+    flex-wrap: nowrap !important;
+}
+.flex-fill {
+    flex: 1 1 auto !important;
+}
+.flex-grow-1 {
+    flex-grow: 1 !important;
+}
+
+$justify: (
+    start: flex-start,
+    end: flex-end,
+    center: center,
+    between: space-between,
+    around: space-around,
+    evenly: space-evenly,
+);
+@each $key, $val in $justify {
+    .justify-content-#{$key} {
+        justify-content: $val !important;
+    }
+}
+$align: (
+    start: flex-start,
+    end: flex-end,
+    center: center,
+    baseline: baseline,
+    stretch: stretch,
+);
+@each $key, $val in $align {
+    .align-items-#{$key} {
+        align-items: $val !important;
+    }
+    .align-self-#{$key} {
+        align-self: $val !important;
+    }
+}
+
+@each $key, $val in $spacers {
+    .gap-#{$key} {
+        gap: $val !important;
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Text / font utilities
+// -----------------------------------------------------------------------------
+.text-start {
+    text-align: start !important;
+}
+.text-end {
+    text-align: end !important;
+}
+.text-center {
+    text-align: center !important;
+}
+.text-left {
+    text-align: left !important;
+}
+.text-right {
+    text-align: right !important;
+}
+.text-nowrap {
+    white-space: nowrap !important;
+}
+.text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.text-muted {
+    color: $gray-700 !important;
+}
+.text-break {
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+}
+.fw-bold {
+    font-weight: 700 !important;
+}
+.fw-semibold {
+    font-weight: 600 !important;
+}
+.fw-normal {
+    font-weight: 400 !important;
+}
+.fw-light {
+    font-weight: 300 !important;
+}
+.fst-italic {
+    font-style: italic !important;
+}
+.text-uppercase {
+    text-transform: uppercase !important;
+}
+.text-lowercase {
+    text-transform: lowercase !important;
+}
+.text-capitalize {
+    text-transform: capitalize !important;
+}
+
+@each $name, $color in $theme-colors {
+    .text-#{$name} {
+        color: $color !important;
+    }
+    .bg-#{$name} {
+        background-color: $color !important;
+    }
+}
+.text-white {
+    color: $white !important;
+}
+.bg-white {
+    background-color: $white !important;
+}
+.bg-transparent {
+    background-color: transparent !important;
+}
+
+// -----------------------------------------------------------------------------
+// Float / sizing / position / misc utilities
+// -----------------------------------------------------------------------------
+.float-none {
+    float: none !important;
+}
+.float-start {
+    float: left !important;
+}
+.float-end {
+    float: right !important;
+}
+.w-100 {
+    width: 100% !important;
+}
+.w-auto {
+    width: auto !important;
+}
+.h-100 {
+    height: 100% !important;
+}
+.mw-100 {
+    max-width: 100% !important;
+}
+.mh-100 {
+    max-height: 100% !important;
+}
+.position-relative {
+    position: relative !important;
+}
+.position-absolute {
+    position: absolute !important;
+}
+.position-fixed {
+    position: fixed !important;
+}
+.overflow-auto {
+    overflow: auto !important;
+}
+.overflow-hidden {
+    overflow: hidden !important;
+}
+.rounded-circle {
+    border-radius: 50% !important;
+}
+.border {
+    border: 1px solid $border-color !important;
+}
+.align-middle {
+    vertical-align: middle !important;
+}
+.align-bottom {
+    vertical-align: bottom !important;
+}
+.align-top {
+    vertical-align: top !important;
+}
+.invisible {
+    visibility: hidden !important;
+}
+.visible {
+    visibility: visible !important;
+}
+
+// -----------------------------------------------------------------------------
+// Accessibility helpers
+// -----------------------------------------------------------------------------
+.visually-hidden,
+.sr-only {
+    @include visually-hidden;
+}
+.visually-hidden-focusable:not(:focus):not(:focus-within) {
+    @include visually-hidden;
+}
+
+// -----------------------------------------------------------------------------
+// Buttons
+// -----------------------------------------------------------------------------
+.btn {
+    display: inline-block;
+    font-weight: 400;
+    line-height: 1.5;
+    color: $gray-900;
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    background-color: transparent;
+    border: 1px solid transparent;
+    padding: $input-btn-padding-y $input-btn-padding-x;
+    font-size: $font-size-base;
+    border-radius: $border-radius;
+    transition: $focus-transition;
+
+    &:disabled,
+    &.disabled {
+        pointer-events: none;
+        opacity: 0.65;
+    }
+}
+
+@mixin button-variant(
+    $bg,
+    $fg: $white,
+    $hover: shade-color($bg, 12%),
+    $active: shade-color($bg, 20%)
+) {
+    color: $fg;
+    background-color: $bg;
+    border-color: $bg;
+    &:hover {
+        color: $fg;
+        background-color: $hover;
+        border-color: $hover;
+    }
+    &:active,
+    &.active {
+        color: $fg;
+        background-color: $active;
+        border-color: $active;
+    }
+}
+
+.btn-primary {
+    @include button-variant($primary);
+}
+.btn-secondary {
+    @include button-variant($secondary);
+}
+.btn-success {
+    @include button-variant($success);
+}
+.btn-danger {
+    @include button-variant($danger);
+}
+.btn-warning {
+    @include button-variant($warning, $gray-900);
+}
+.btn-info {
+    @include button-variant($info);
+}
+.btn-light {
+    @include button-variant(
+        $light,
+        $gray-900,
+        shade-color($light, 8%),
+        shade-color($light, 14%)
+    );
+}
+.btn-dark {
+    @include button-variant($dark);
+}
+
+@each $name, $color in $theme-colors {
+    .btn-outline-#{$name} {
+        color: $color;
+        border-color: $color;
+        background-color: transparent;
+        &:hover {
+            color: $white;
+            background-color: $color;
+            border-color: $color;
+        }
+    }
+}
+
+.btn-link {
+    color: $primary;
+    background-color: transparent;
+    border-color: transparent;
+    text-decoration: underline;
+    &:hover {
+        color: shade-color($primary, 20%);
+    }
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+.btn-lg {
+    padding: 0.5rem 1rem;
+    font-size: 1.25rem;
+}
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+// Close button
+.btn-close {
+    box-sizing: content-box;
+    width: 1em;
+    height: 1em;
+    padding: 0.25em;
+    color: $gray-900;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    opacity: 0.5;
+    &::before {
+        content: '\00d7';
+        font-size: 1.5rem;
+        line-height: 1;
+    }
+    &:hover {
+        opacity: 0.85;
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Forms
+// -----------------------------------------------------------------------------
+.form-label,
+.col-form-label {
+    display: inline-block;
+    margin-bottom: 0.5rem;
+}
+
+.form-control,
+.form-select {
+    display: block;
+    width: 100%;
+    padding: $input-btn-padding-y $input-btn-padding-x;
+    font-size: $font-size-base;
+    line-height: 1.5;
+    color: $gray-900;
+    background-color: $white;
+    border: 1px solid $gray-500;
+    border-radius: $border-radius;
+    appearance: none;
+    transition: $focus-transition;
+
+    &:focus {
+        outline: 0;
+    }
+    &:disabled {
+        background-color: $gray-200;
+        opacity: 1;
+    }
+    &::placeholder {
+        color: $gray-600;
+    }
+}
+
+.form-select {
+    padding-inline-end: 2.25rem;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+}
+
+textarea.form-control {
+    min-height: calc(1.5em + 0.75rem + 2px);
+}
+
+.form-control.is-invalid,
+.form-select.is-invalid,
+.was-validated .form-control:invalid {
+    border-color: $danger;
+}
+
+.invalid-feedback {
+    display: none;
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: $danger;
+}
+.is-invalid ~ .invalid-feedback,
+.was-validated :invalid ~ .invalid-feedback {
+    display: block;
+}
+
+.form-text {
+    margin-top: 0.25rem;
+    font-size: 0.875rem;
+    color: $gray-700;
+}
+
+.form-group {
+    margin-bottom: $spacer;
+}
+
+// Checks & radios
+.form-check {
+    display: block;
+    min-height: 1.5rem;
+    padding-inline-start: 1.5em;
+    margin-bottom: 0.125rem;
+}
+.form-check-inline {
+    display: inline-block;
+    margin-inline-end: 1rem;
+}
+.form-check-input {
+    width: 1em;
+    height: 1em;
+    margin-top: 0.25em;
+    margin-inline-start: -1.5em;
+    vertical-align: top;
+    background-color: $white;
+    border: 1px solid $gray-500;
+    appearance: none;
+    cursor: pointer;
+    &[type='checkbox'] {
+        border-radius: $border-radius;
+    }
+    &[type='radio'] {
+        border-radius: 50%;
+    }
+    &:checked {
+        background-color: $primary;
+        border-color: $primary;
+    }
+    &:checked[type='checkbox'] {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3 6-6'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+    }
+    &:checked[type='radio'] {
+        background-image: radial-gradient(circle, #fff 30%, transparent 35%);
+    }
+    &:indeterminate {
+        background-color: $primary;
+        border-color: $primary;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-width='2' d='M3 8h10'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+    &:disabled {
+        opacity: 0.5;
+        cursor: default;
+    }
+}
+.form-check-label {
+    cursor: pointer;
+}
+
+// Switch
+.form-switch {
+    padding-inline-start: 2.5em;
+    .form-check-input {
+        width: 2em;
+        margin-inline-start: -2.5em;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23999'/%3e%3c/svg%3e");
+        background-position: left center;
+        background-repeat: no-repeat;
+        border-radius: $form-switch-border-radius;
+        transition: background-position 0.15s ease-in-out;
+        &:checked {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+            background-position: right center;
+        }
+    }
+}
+
+// Input group
+.input-group {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    width: 100%;
+    > .form-control,
+    > .form-select {
+        position: relative;
+        flex: 1 1 auto;
+        width: 1%;
+        min-width: 0;
+    }
+}
+.input-group-text {
+    display: flex;
+    align-items: center;
+    padding: $input-btn-padding-y $input-btn-padding-x;
+    font-size: $font-size-base;
+    color: $gray-900;
+    background-color: $gray-200;
+    border: 1px solid $gray-500;
+}
+
+// -----------------------------------------------------------------------------
+// Tables
+// -----------------------------------------------------------------------------
+.table {
+    width: 100%;
+    margin-bottom: $spacer;
+    color: $gray-900;
+    vertical-align: top;
+    border-collapse: collapse;
+
+    th,
+    td {
+        padding: 0.5rem 0.5rem;
+        border-bottom: 1px solid $gray-300;
+        text-align: start;
+    }
+    thead th {
+        vertical-align: bottom;
+        border-bottom: 2px solid $gray-300;
+        font-weight: 600;
+    }
+    &.table-hover tbody tr:hover {
+        background-color: $gray-100;
+    }
+}
+.table-light {
+    background-color: $gray-100;
+}
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+// -----------------------------------------------------------------------------
+// Card
+// -----------------------------------------------------------------------------
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background-color: $white;
+    border: 1px solid $gray-300;
+    border-radius: $border-radius;
+}
+.card-body {
+    flex: 1 1 auto;
+    padding: $spacer;
+}
+.card-header {
+    padding: calc(#{$spacer} * 0.5) $spacer;
+    border-bottom: 1px solid $gray-300;
+    background-color: $gray-100;
+}
+.card-footer {
+    padding: calc(#{$spacer} * 0.5) $spacer;
+    border-top: 1px solid $gray-300;
+    background-color: $gray-100;
+}
+.card-title {
+    margin-bottom: 0.5rem;
+}
+.card-group {
+    display: flex;
+    flex-direction: column;
+}
+
+// -----------------------------------------------------------------------------
+// Badge
+// -----------------------------------------------------------------------------
+.badge {
+    display: inline-block;
+    padding: 0.35em 0.65em;
+    font-size: 0.75em;
+    font-weight: 700;
+    line-height: 1;
+    color: $white;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: $border-radius;
+}
+@each $name, $color in $theme-colors {
+    .badge.bg-#{$name},
+    .badge.text-bg-#{$name} {
+        background-color: $color;
+        color: if($name == light or $name == warning, $gray-900, $white);
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Alert
+// -----------------------------------------------------------------------------
+.alert {
+    position: relative;
+    padding: $spacer $spacer;
+    margin-bottom: $spacer;
+    border: 1px solid transparent;
+    border-radius: $border-radius;
+}
+@each $name, $color in $theme-colors {
+    .alert-#{$name} {
+        color: shade-color($color, 40%);
+        background-color: tint-color($color, 80%);
+        border-color: tint-color($color, 60%);
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Modal (base; HeadlessUI handles behavior, these style the markup)
+// -----------------------------------------------------------------------------
+.modal-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background-color: $white;
+    border: 1px solid rgba($black, 0.2);
+    border-radius: $border-radius;
+    outline: 0;
+}
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: $spacer;
+    border-bottom: 1px solid $gray-300;
+}
+.modal-title {
+    margin: 0;
+    line-height: 1.5;
+}
+.modal-body {
+    position: relative;
+    flex: 1 1 auto;
+    padding: $spacer;
+}
+.modal-footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: calc(#{$spacer} * 0.75);
+    border-top: 1px solid $gray-300;
+}
+
+// -----------------------------------------------------------------------------
+// Dropdown (base; HeadlessUI Menu handles behavior)
+// -----------------------------------------------------------------------------
+.dropdown-menu {
+    position: absolute;
+    z-index: $zindex-dropdown;
+    display: block;
+    min-width: 10rem;
+    padding: 0.5rem 0;
+    margin: 0;
+    font-size: $font-size-base;
+    color: $gray-900;
+    list-style: none;
+    background-color: $white;
+    border: 1px solid rgba($black, 0.15);
+    border-radius: $border-radius;
+}
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 0.25rem 1rem;
+    clear: both;
+    font-weight: 400;
+    color: $gray-900;
+    text-align: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+    &:hover,
+    &:focus {
+        background-color: $gray-100;
+    }
+}
+.dropdown-divider {
+    height: 0;
+    margin: 0.5rem 0;
+    overflow: hidden;
+    border-top: 1px solid $gray-200;
+}
+
+// -----------------------------------------------------------------------------
+// Nav / Navbar
+// -----------------------------------------------------------------------------
+.nav {
+    display: flex;
+    flex-wrap: wrap;
+    padding-inline-start: 0;
+    margin-bottom: 0;
+    list-style: none;
+    &.flex-column {
+        flex-direction: column;
+    }
+}
+.nav-link {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: $primary;
+    text-decoration: none;
+    background: none;
+    border: 0;
+    cursor: pointer;
+}
+.nav-item {
+    list-style: none;
+}
+.navbar {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 1rem;
+}
+.navbar-brand {
+    display: inline-block;
+    padding-block: 0.3125rem;
+    margin-inline-end: 1rem;
+    font-size: 1.25rem;
+    text-decoration: none;
+    white-space: nowrap;
+}
+.navbar-nav {
+    display: flex;
+    flex-direction: row;
+    padding-inline-start: 0;
+    margin-bottom: 0;
+    list-style: none;
+}
+
+// -----------------------------------------------------------------------------
+// Pagination
+// -----------------------------------------------------------------------------
+.pagination {
+    display: flex;
+    padding-inline-start: 0;
+    list-style: none;
+}
+.page-link {
+    position: relative;
+    display: block;
+    padding: 0.375rem 0.75rem;
+    color: $primary;
+    text-decoration: none;
+    background-color: $white;
+    border: 1px solid $gray-300;
+    cursor: pointer;
+    &:hover {
+        background-color: $gray-100;
+    }
+}
+.page-item.active .page-link {
+    z-index: 1;
+    color: $white;
+    background-color: $primary;
+    border-color: $primary;
+}
+.page-item.disabled .page-link {
+    color: $gray-500;
+    pointer-events: none;
+}
+
+// -----------------------------------------------------------------------------
+// Progress
+// -----------------------------------------------------------------------------
+.progress {
+    display: flex;
+    height: 1rem;
+    overflow: hidden;
+    font-size: 0.75rem;
+    background-color: $gray-200;
+    border-radius: $border-radius;
+}
+.progress-bar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
+    color: $white;
+    text-align: center;
+    white-space: nowrap;
+    background-color: $primary;
+    transition: width 0.6s ease;
+}
+
+// -----------------------------------------------------------------------------
+// Spinner
+// -----------------------------------------------------------------------------
+@keyframes spinner-border {
+    to {
+        transform: rotate(360deg);
+    }
+}
+.spinner-border {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    vertical-align: -0.125em;
+    border: 0.25em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: 0.75s linear infinite spinner-border;
+}
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+    border-width: 0.2em;
+}
+
+// -----------------------------------------------------------------------------
+// Toast
+// -----------------------------------------------------------------------------
+.toast {
+    width: 350px;
+    max-width: 100%;
+    font-size: 0.875rem;
+    background-color: $white;
+    background-clip: padding-box;
+    border: 1px solid rgba($black, 0.1);
+    box-shadow: $box-shadow;
+}
+.toast-header {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    color: $gray-700;
+    background-color: rgba($white, 0.85);
+    border-bottom: 1px solid rgba($black, 0.05);
+}
+.toast-body {
+    padding: 0.75rem;
+    word-wrap: break-word;
+}
+
+// -----------------------------------------------------------------------------
+// Dropdown positioning (kit BDropdown)
+// -----------------------------------------------------------------------------
+.dropdown {
+    position: relative;
+}
+.dropdown-menu {
+    inset-inline-start: 0;
+    top: 100%;
+}
+.dropdown-menu-end {
+    inset-inline-start: auto;
+    inset-inline-end: 0;
+}
+
+// -----------------------------------------------------------------------------
+// Nav tabs (kit BTabs)
+// -----------------------------------------------------------------------------
+.nav-tabs {
+    border-bottom: 1px solid $gray-300;
+    .nav-item {
+        margin-bottom: -1px;
+    }
+    .nav-link {
+        border: 1px solid transparent;
+        background: none;
+        color: $primary;
+        &.active {
+            color: $gray-900;
+            background-color: $white;
+            border-color: $gray-300 $gray-300 $white;
+        }
+    }
+}
+.tab-content {
+    > .tab-pane {
+        width: 100%;
+    }
+}
+
+// -----------------------------------------------------------------------------
+// List group (kit BListGroup)
+// -----------------------------------------------------------------------------
+.list-group {
+    display: flex;
+    flex-direction: column;
+    padding-inline-start: 0;
+    margin-bottom: 0;
+}
+.list-group-item {
+    position: relative;
+    display: block;
+    padding: 0.5rem 1rem;
+    color: $gray-900;
+    background-color: $white;
+    border: 1px solid rgba($black, 0.125);
+    & + & {
+        border-top-width: 0;
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Navbar toggler (kit BNavbarToggle)
+// -----------------------------------------------------------------------------
+.navbar-toggler {
+    padding: 0.25rem 0.75rem;
+    background-color: transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
+}
+
+// Close button on dark surfaces
+.btn-close-white {
+    color: $white;
+}

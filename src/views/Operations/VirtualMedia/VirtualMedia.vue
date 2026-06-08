@@ -135,7 +135,7 @@ import ModalConfigureConnection from './ModalConfigureConnection';
 import NbdServer from '@/utilities/NBDServer';
 import FormFile from '@/components/Global/FormFile';
 import i18n from '@/i18n';
-import { useModal } from 'bootstrap-vue-next';
+import { useModal } from '@/components/Bootstrap/useModal';
 
 export default {
   name: 'VirtualMedia',

@@ -97,7 +97,7 @@ import DataFormatterMixin from '@/components/Mixins/DataFormatterMixin';
 import ModalIpv6 from './ModalIpv6.vue';
 import { mapState } from 'vuex';
 import i18n from '@/i18n';
-import { useModal } from 'bootstrap-vue-next';
+import { useModal } from '@/components/Bootstrap/useModal';
 
 export default {
   name: 'Ipv6Table',

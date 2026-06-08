@@ -1,5 +1,5 @@
-// Vendor styles
-@import "./bootstrap";
+// Bootstrap-compatibility base (replaces the former `bootstrap` vendor import)
+@import './compat';
 
 // Custom BMC styles
-@import "./bmc/custom";
+@import './bmc/custom';

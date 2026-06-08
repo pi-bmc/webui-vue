@@ -182,7 +182,7 @@ import InfoTooltip from '@/components/Global/InfoTooltip';
 import i18n from '@/i18n';
 import { privilegesId } from '@/store/modules/GlobalStore';
 import { mapGetters } from 'vuex';
-import { useModal } from 'bootstrap-vue-next';
+import { useModal } from '@/components/Bootstrap/useModal';
 
 export default {
   name: 'ServerPowerOperations',
