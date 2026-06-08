@@ -5,6 +5,11 @@
 @source './../../views';
 @source './../../layouts';
 
+/* Manual dark mode: `dark:` utilities follow the [data-theme="dark"] attribute
+   set on <html> (by index.html and the useColorMode composable), instead of the
+   OS media query alone — this lets users override the system preference. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
 /* -------------------------------------------------------------------------- */
 /* OpenBMC design tokens                                                       */
 /* -------------------------------------------------------------------------- */
@@ -47,4 +52,36 @@
   [data-headlessui-state] {
     outline: none;
   }
+}
+
+/* -------------------------------------------------------------------------- */
+/* Semantic surface tokens — light defaults, remapped for dark mode.          */
+/* Consumed by the dark overlay (_dark.scss) and available to dark: utilities */
+/* -------------------------------------------------------------------------- */
+:root,
+:root[data-theme='light'] {
+  --bmc-body-bg: #ffffff;
+  --bmc-body-color: #161616;
+  --bmc-surface: #ffffff;
+  --bmc-surface-2: #f4f4f4;
+  --bmc-input-bg: #ffffff;
+  --bmc-border: #d8d8d8;
+  --bmc-border-strong: #b3b3b3;
+  --bmc-muted: #666666;
+  --bmc-sidebar-bg: #f4f4f4;
+  --bmc-sidebar-text: #3f3f3f;
+}
+
+:root[data-theme='dark'] {
+  --bmc-body-bg: #161616;
+  --bmc-body-color: #f4f4f4;
+  --bmc-surface: #262626;
+  --bmc-surface-2: #1f1f1f;
+  --bmc-input-bg: #2a2a2a;
+  --bmc-border: #4d4d4d;
+  --bmc-border-strong: #5e5e5e;
+  --bmc-muted: #b3b3b3;
+  --bmc-sidebar-bg: #1f1f1f;
+  --bmc-sidebar-text: #e6e6e6;
+  color-scheme: dark;
 }

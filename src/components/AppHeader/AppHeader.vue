@@ -103,6 +103,18 @@
                   @update:model-value="languageChange"
                 ></b-form-select>
               </li>
+              <li role="none" class="dropdown-language-item">
+                <label for="app-header-theme" class="dropdown-language-label">{{
+                  $t('appHeader.theme')
+                }}</label>
+                <b-form-select
+                  id="app-header-theme"
+                  :model-value="colorPreference"
+                  :options="themeOptions"
+                  data-test-id="app-header-select-theme"
+                  @update:model-value="setColorTheme"
+                ></b-form-select>
+              </li>
               <b-dropdown-divider />
               <b-dropdown-item
                 data-test-id="appHeader-link-logout"
@@ -131,6 +143,7 @@ import LogoHeader from '@/assets/images/logo-header.svg?component';
 import { mapState } from 'vuex';
 import i18n, { getAvailableLanguages } from '@/i18n';
 import eventBus from '@/eventBus';
+import { useColorMode } from '@/components/Composables/useColorMode';
 
 export default {
   name: 'AppHeader',
@@ -151,6 +164,11 @@ export default {
     },
   },
   emits: ['refresh', 'language-change'],
+  setup() {
+    const { preference: colorPreference, setPreference: setColorTheme } =
+      useColorMode();
+    return { colorPreference, setColorTheme };
+  },
   data() {
     return {
       isNavigationOpen: false,
@@ -216,6 +234,13 @@ export default {
     },
     languages() {
       return getAvailableLanguages(this.$i18n.availableLocales);
+    },
+    themeOptions() {
+      return [
+        { value: 'system', text: this.$t('appHeader.themeSystem') },
+        { value: 'light', text: this.$t('appHeader.themeLight') },
+        { value: 'dark', text: this.$t('appHeader.themeDark') },
+      ];
     },
   },
   watch: {

@@ -3,3 +3,6 @@
 
 // Custom BMC styles
 @import './bmc/custom';
+
+// Dark theme overlay (must come last to override light surfaces)
+@import './dark';

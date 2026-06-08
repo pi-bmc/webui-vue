@@ -166,6 +166,22 @@ exports[`AppHeader.vue > should render correctly 1`] = `
                 value="''"
               ></select>
             </li>
+            <li
+              class="dropdown-language-item"
+              role="none"
+            >
+              <label
+                class="dropdown-language-label"
+                for="app-header-theme"
+              >
+                appHeader.theme
+              </label>
+              <select
+                id="app-header-theme"
+                model-value="system"
+                value="''"
+              ></select>
+            </li>
             <b-dropdown-divider></b-dropdown-divider>
             <div>
               appHeader.logOut
