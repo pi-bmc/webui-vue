@@ -426,7 +426,19 @@ function ethernetInterface(path) {
     HostName: 'demo-bmc',
     FQDN: 'demo-bmc.local',
     Status: okStatus,
-    DHCPv4: { DHCPEnabled: false, UseDNSServers: false, UseNTPServers: false },
+    DHCPv4: {
+      DHCPEnabled: false,
+      UseDNSServers: false,
+      UseDomainName: false,
+      UseNTPServers: false,
+    },
+    DHCPv6: {
+      OperatingMode: 'Disabled',
+      UseDNSServers: false,
+      UseDomainName: false,
+      UseNTPServers: false,
+    },
+    IPv6DefaultGateway: 'fe80::1',
     IPv4Addresses: [
       {
         Address: '192.168.1.50',

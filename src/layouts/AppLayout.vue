@@ -113,7 +113,7 @@ export default {
 
 .app-content {
   grid-area: content;
-  background-color: $white;
+  background-color: var(--bmc-body-bg);
   min-width: 0;
   min-height: calc(100vh - #{$header-height});
 }

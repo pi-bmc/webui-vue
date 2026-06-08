@@ -27,12 +27,6 @@ const app = createApp(App);
 
 app.use(BootstrapCompat);
 
-app.use(i18n);
-app.use(router);
-app.use(store);
-app.use(ToastPlugin);
-app.use(VueQueryPlugin);
-
 app.config.globalProperties.$eventBus = eventBus;
 app.config.globalProperties.$confirm = (messageOrOptions, options = {}) => {
   return new Promise((resolve) => {
@@ -91,12 +85,22 @@ const filter = {
 app.config.globalProperties.$filters = filter;
 
 // Dev-only demo mode: seed auth + mock Redfish data so the UI runs with no
-// backend. The import is dead-code-eliminated unless VITE_DEMO_MODE=true.
+// backend. This MUST happen before `app.use(router)` installs the router and
+// triggers the initial navigation, otherwise the route guard redirects to
+// /login before auth is seeded. The import is dead-code-eliminated unless
+// VITE_DEMO_MODE=true.
 async function boot() {
   if (import.meta.env.VITE_DEMO_MODE === 'true') {
     const { installDemoBackend } = await import('@/mocks/demoBackend');
     installDemoBackend(store);
   }
+
+  app.use(i18n);
+  app.use(router);
+  app.use(store);
+  app.use(ToastPlugin);
+  app.use(VueQueryPlugin);
+
   app.mount('#app');
 }
 

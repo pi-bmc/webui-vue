@@ -52,6 +52,12 @@
             border-color: $primary;
         }
     }
+    // _forms.scss forces dark text on check/switch labels (incl. status text
+    // rendered inside a switch cell), which is invisible on dark surfaces.
+    .form-check-label,
+    .custom-control-label {
+        color: var(--bmc-body-color) !important;
+    }
 
     // b-form-tags (not yet migrated)
     .b-form-tags {
@@ -63,6 +69,16 @@
         background-color: var(--bmc-surface-2) !important;
         color: var(--bmc-body-color) !important;
         border-color: var(--bmc-border-strong) !important;
+    }
+
+    // Tabs: active tab should blend with the dark card surface, not stay white
+    .nav-tabs {
+        border-bottom-color: var(--bmc-border);
+        .nav-link.active {
+            background-color: var(--bmc-surface);
+            border-color: var(--bmc-border) var(--bmc-border) var(--bmc-surface);
+            color: var(--bmc-body-color);
+        }
     }
 
     // Modal
@@ -128,8 +144,23 @@
         color: var(--bmc-body-color);
     }
 
-    // Generic light surfaces used as accents
+    // Light-surface utility classes used directly in markup (e.g. cards with
+    // `bg-light border-light`) must be remapped, or they force light surfaces
+    // in dark mode. Higher specificity than the base `.bg-light !important`.
+    .bg-light,
     .bg-white {
         background-color: var(--bmc-surface) !important;
+    }
+    .border-light {
+        border-color: var(--bmc-border) !important;
+    }
+    .text-dark {
+        color: var(--bmc-body-color) !important;
+    }
+
+    // `.form-background` panels (e.g. inventory LED/power-status section) keep a
+    // light gray surface in dark mode; remap the container itself.
+    .form-background {
+        background-color: var(--bmc-surface-2) !important;
     }
 }

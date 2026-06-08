@@ -3,6 +3,7 @@ export const CHECKBOX_GROUP_KEY = Symbol('bvCheckboxGroup');
 export const RADIO_GROUP_KEY = Symbol('bvRadioGroup');
 export const TABS_KEY = Symbol('bvTabs');
 export const DROPDOWN_KEY = Symbol('bvDropdown');
+export const SELECT_KEY = Symbol('bvSelect');
 
 let counter = 0;
 export function uid(prefix = 'bv') {
