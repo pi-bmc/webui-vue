@@ -115,5 +115,6 @@ export default {
   grid-area: content;
   background-color: $white;
   min-width: 0;
+  min-height: calc(100vh - #{$header-height});
 }
 </style>

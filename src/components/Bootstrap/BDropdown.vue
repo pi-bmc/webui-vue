@@ -1,37 +1,49 @@
 <template>
-  <div ref="root" class="dropdown" :class="{ show: open }">
-    <component
-      :is="toggleTag"
+  <!-- HeadlessUI Menu handles open/close, keyboard nav (↑↓ Enter Esc Tab), and
+       ARIA aria-expanded/aria-haspopup automatically. -->
+  <h-menu v-slot="{ open }" as="div" class="dropdown">
+    <h-menu-button
+      as="button"
       :class="toggleClasses"
-      :aria-expanded="open ? 'true' : 'false'"
-      :type="toggleTag === 'button' ? 'button' : undefined"
-      @click="toggle"
+      :type="'button'"
+      @click="open ? $emit('hide') : $emit('show')"
     >
       <slot name="button-content">{{ text }}</slot>
-      <span v-if="!noCaret" class="dropdown-caret" aria-hidden="true">▾</span>
-    </component>
-    <ul
-      v-show="open"
-      class="dropdown-menu"
-      :class="{ show: open, 'dropdown-menu-end': right }"
+      <span v-if="!noCaret" class="dropdown-caret" aria-hidden="true"></span>
+    </h-menu-button>
+
+    <transition
+      enter-active-class="transition duration-100 ease-out"
+      enter-from-class="opacity-0 scale-95"
+      enter-to-class="opacity-100 scale-100"
+      leave-active-class="transition duration-75 ease-in"
+      leave-from-class="opacity-100 scale-100"
+      leave-to-class="opacity-0 scale-95"
     >
-      <slot />
-    </ul>
-  </div>
+      <h-menu-items
+        as="ul"
+        class="dropdown-menu"
+        :class="{ 'dropdown-menu-end': right }"
+      >
+        <slot />
+      </h-menu-items>
+    </transition>
+  </h-menu>
 </template>
 
 <script>
+import { Menu as HMenu, MenuButton as HMenuButton, MenuItems as HMenuItems } from '@headlessui/vue';
 import { DROPDOWN_KEY } from './groupKeys';
 
 export default {
   name: 'BDropdown',
+  components: { HMenu, HMenuButton, HMenuItems },
   provide() {
-    const vm = this;
     return {
       [DROPDOWN_KEY]: {
-        closeOnItemClick: () =>
-          vm.autoClose === true || vm.autoClose === 'inside',
-        close: () => vm.hide(),
+        closeOnItemClick: () => this.autoClose === true || this.autoClose === 'inside',
+        // HMenu handles close automatically; this is a no-op for programmatic use
+        close: () => {},
       },
     };
   },
@@ -42,17 +54,10 @@ export default {
     right: { type: Boolean, default: false },
     noCaret: { type: Boolean, default: false },
     toggleClass: { type: [String, Array, Object], default: '' },
-    // true | false | 'inside' | 'outside'
     autoClose: { type: [Boolean, String], default: true },
   },
   emits: ['show', 'hide'],
-  data() {
-    return { open: false };
-  },
   computed: {
-    toggleTag() {
-      return 'button';
-    },
     toggleClasses() {
       return [
         'btn',
@@ -61,36 +66,6 @@ export default {
         'dropdown-toggle',
         this.toggleClass,
       ];
-    },
-  },
-  beforeUnmount() {
-    document.removeEventListener('click', this.onDocumentClick, true);
-  },
-  methods: {
-    toggle() {
-      this.open ? this.hide() : this.show();
-    },
-    show() {
-      if (this.open) return;
-      this.open = true;
-      this.$emit('show');
-      document.addEventListener('click', this.onDocumentClick, true);
-    },
-    hide() {
-      if (!this.open) return;
-      this.open = false;
-      this.$emit('hide');
-      document.removeEventListener('click', this.onDocumentClick, true);
-    },
-    onDocumentClick(event) {
-      const root = this.$refs.root;
-      if (!root) return;
-      if (root.contains(event.target)) {
-        // Click inside: only close when autoClose is true/'inside'
-        return;
-      }
-      // Click outside: close unless autoClose is explicitly disabled
-      if (this.autoClose !== false) this.hide();
     },
   },
 };

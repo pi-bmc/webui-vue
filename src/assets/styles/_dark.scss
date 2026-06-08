@@ -1,14 +1,13 @@
 // -----------------------------------------------------------------------------
 // Dark theme overlay
 //
-// Applied when <html data-theme="dark"> is set (by the FOUC script in
-// index.html and the useColorMode composable). This overrides the surface,
-// text and border colors of the compat base + OpenBMC custom partials, which
-// are authored with static light-mode Sass colors.
+// Applied when <html data-theme="dark"> is set. Overrides static light-mode
+// colors in the SCSS partials (bmc/custom/*) that are NOT yet migrated to the
+// Tailwind @layer components (which has @variant dark built-in).
 //
-// Surfaces pull from the --bmc-* tokens declared in tailwind.css. `!important`
-// is used where the light rules it overrides are themselves `!important`
-// (forms) or live in scoped component styles (the navigation sidebar).
+// Sections migrated to tailwind.css and removed from here:
+//   card, forms, table, dropdown, list-group, pagination, btn-link hover
+// Sections remaining: modal, nav-container (scoped), toast, headings, bg-white
 // -----------------------------------------------------------------------------
 
 [data-theme='dark'] {
@@ -18,7 +17,7 @@
         color: var(--bmc-body-color);
     }
 
-    // Headings / form labels (light rules set these to dark grays)
+    // Headings / form labels (light rules in _base.scss set these to dark grays)
     h1,
     h2,
     h3,
@@ -44,44 +43,7 @@
         color: var(--bmc-muted) !important;
     }
 
-    // Cards
-    .card {
-        background-color: var(--bmc-surface);
-        border-color: var(--bmc-border);
-        color: var(--bmc-body-color);
-    }
-    .card-header,
-    .card-footer {
-        background-color: var(--bmc-surface-2);
-        border-color: var(--bmc-border);
-    }
-
-    // Forms
-    .form-control,
-    .form-select,
-    .custom-select,
-    .input-group-text,
-    .b-form-tags {
-        background-color: var(--bmc-input-bg) !important;
-        color: var(--bmc-body-color) !important;
-        border-color: var(--bmc-border-strong) !important;
-    }
-    .form-control::placeholder {
-        color: var(--bmc-muted);
-    }
-    .form-control:disabled,
-    .form-select:disabled {
-        background-color: var(--bmc-surface-2) !important;
-        color: var(--bmc-muted) !important;
-    }
-    .form-background {
-        background-color: var(--bmc-surface-2);
-        .form-control,
-        .form-select,
-        .custom-select {
-            background-color: var(--bmc-surface) !important;
-        }
-    }
+    // Form checks/radios (not yet migrated from bmc/custom/_forms.scss)
     .form-check-input {
         background-color: var(--bmc-input-bg);
         border-color: var(--bmc-border-strong);
@@ -90,30 +52,17 @@
             border-color: $primary;
         }
     }
-    // The select chevron is a dark SVG by default; lighten it for dark surfaces
-    .form-select {
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23e6e6e6' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
-    }
 
-    // Tables
-    .table {
-        color: var(--bmc-body-color);
-        th,
-        td {
-            border-color: var(--bmc-border);
-        }
-        thead th {
-            border-color: var(--bmc-border-strong);
-        }
-        &.table-hover tbody tr:hover {
-            background-color: var(--bmc-surface-2);
-        }
+    // b-form-tags (not yet migrated)
+    .b-form-tags {
+        background-color: var(--bmc-input-bg) !important;
+        color: var(--bmc-body-color) !important;
+        border-color: var(--bmc-border-strong) !important;
     }
-    .table-light,
-    thead.table-light,
-    .thead-light th {
+    .input-group-text {
         background-color: var(--bmc-surface-2) !important;
         color: var(--bmc-body-color) !important;
+        border-color: var(--bmc-border-strong) !important;
     }
 
     // Modal
@@ -125,44 +74,6 @@
     .modal-header,
     .modal-footer {
         border-color: var(--bmc-border);
-    }
-
-    // Dropdown
-    .dropdown-menu {
-        background-color: var(--bmc-surface);
-        color: var(--bmc-body-color);
-        border-color: var(--bmc-border);
-    }
-    .dropdown-item {
-        color: var(--bmc-body-color);
-        &:hover,
-        &:focus {
-            background-color: var(--bmc-surface-2);
-        }
-    }
-    .dropdown-divider {
-        border-color: var(--bmc-border);
-    }
-
-    // List group
-    .list-group-item {
-        background-color: var(--bmc-surface);
-        color: var(--bmc-body-color);
-        border-color: var(--bmc-border);
-    }
-
-    // Pagination
-    .page-link {
-        background-color: var(--bmc-surface);
-        color: $white;
-        border-color: var(--bmc-border);
-        &:hover {
-            background-color: var(--bmc-surface-2);
-        }
-    }
-    .page-item.disabled .page-link {
-        background-color: var(--bmc-surface);
-        color: var(--bmc-muted);
     }
 
     // Navigation sidebar (AppNavigation uses scoped light colors → !important)

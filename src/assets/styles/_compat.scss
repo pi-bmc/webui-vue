@@ -461,217 +461,18 @@ $align: (
     @include visually-hidden;
 }
 
-// -----------------------------------------------------------------------------
-// Buttons
-// -----------------------------------------------------------------------------
-.btn {
-    display: inline-block;
-    font-weight: 400;
-    line-height: 1.5;
-    color: $gray-900;
-    text-align: center;
-    text-decoration: none;
-    vertical-align: middle;
-    cursor: pointer;
-    user-select: none;
-    background-color: transparent;
-    border: 1px solid transparent;
-    padding: $input-btn-padding-y $input-btn-padding-x;
-    font-size: $font-size-base;
-    border-radius: $border-radius;
-    transition: $focus-transition;
+// Buttons, form controls, card, table, badge, alert, progress, dropdown,
+// pagination, and list-group are now defined in @layer components inside
+// tailwind.css. Only the form helpers below remain here.
 
-    &:disabled,
-    &.disabled {
-        pointer-events: none;
-        opacity: 0.65;
-    }
-}
+// (check/radio/switch/input-group kept in SCSS – not yet migrated)
 
-@mixin button-variant(
-    $bg,
-    $fg: $white,
-    $hover: shade-color($bg, 12%),
-    $active: shade-color($bg, 20%)
-) {
-    color: $fg;
-    background-color: $bg;
-    border-color: $bg;
-    &:hover {
-        color: $fg;
-        background-color: $hover;
-        border-color: $hover;
-    }
-    &:active,
-    &.active {
-        color: $fg;
-        background-color: $active;
-        border-color: $active;
-    }
-}
-
-.btn-primary {
-    @include button-variant($primary);
-}
-.btn-secondary {
-    @include button-variant($secondary);
-}
-.btn-success {
-    @include button-variant($success);
-}
-.btn-danger {
-    @include button-variant($danger);
-}
-.btn-warning {
-    @include button-variant($warning, $gray-900);
-}
-.btn-info {
-    @include button-variant($info);
-}
-.btn-light {
-    @include button-variant(
-        $light,
-        $gray-900,
-        shade-color($light, 8%),
-        shade-color($light, 14%)
-    );
-}
-.btn-dark {
-    @include button-variant($dark);
-}
-
-@each $name, $color in $theme-colors {
-    .btn-outline-#{$name} {
-        color: $color;
-        border-color: $color;
-        background-color: transparent;
-        &:hover {
-            color: $white;
-            background-color: $color;
-            border-color: $color;
-        }
-    }
-}
-
-.btn-link {
-    color: $primary;
-    background-color: transparent;
-    border-color: transparent;
-    text-decoration: underline;
-    &:hover {
-        color: shade-color($primary, 20%);
-    }
-}
-
-.btn-sm {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.875rem;
-}
-.btn-lg {
-    padding: 0.5rem 1rem;
-    font-size: 1.25rem;
-}
-.btn-block {
-    display: block;
-    width: 100%;
-}
-
-// Close button
-.btn-close {
-    box-sizing: content-box;
-    width: 1em;
-    height: 1em;
-    padding: 0.25em;
-    color: $gray-900;
-    background: transparent;
-    border: 0;
-    cursor: pointer;
-    opacity: 0.5;
-    &::before {
-        content: '\00d7';
-        font-size: 1.5rem;
-        line-height: 1;
-    }
-    &:hover {
-        opacity: 0.85;
-    }
-}
-
-// -----------------------------------------------------------------------------
-// Forms
-// -----------------------------------------------------------------------------
-.form-label,
-.col-form-label {
-    display: inline-block;
-    margin-bottom: 0.5rem;
-}
-
-.form-control,
-.form-select {
-    display: block;
-    width: 100%;
-    padding: $input-btn-padding-y $input-btn-padding-x;
-    font-size: $font-size-base;
-    line-height: 1.5;
-    color: $gray-900;
-    background-color: $white;
-    border: 1px solid $gray-500;
-    border-radius: $border-radius;
-    appearance: none;
-    transition: $focus-transition;
-
-    &:focus {
-        outline: 0;
-    }
-    &:disabled {
-        background-color: $gray-200;
-        opacity: 1;
-    }
-    &::placeholder {
-        color: $gray-600;
-    }
-}
-
-.form-select {
-    padding-inline-end: 2.25rem;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
-    background-repeat: no-repeat;
-    background-position: right 0.75rem center;
-    background-size: 16px 12px;
-}
-
+// Textarea min-height kept here since form-control block is now in Tailwind
 textarea.form-control {
     min-height: calc(1.5em + 0.75rem + 2px);
 }
 
-.form-control.is-invalid,
-.form-select.is-invalid,
-.was-validated .form-control:invalid {
-    border-color: $danger;
-}
-
-.invalid-feedback {
-    display: none;
-    width: 100%;
-    margin-top: 0.25rem;
-    font-size: 0.875rem;
-    color: $danger;
-}
-.is-invalid ~ .invalid-feedback,
-.was-validated :invalid ~ .invalid-feedback {
-    display: block;
-}
-
-.form-text {
-    margin-top: 0.25rem;
-    font-size: 0.875rem;
-    color: $gray-700;
-}
-
-.form-group {
-    margin-bottom: $spacer;
-}
-
+// -----------------------------------------------------------------------------
 // Checks & radios
 .form-check {
     display: block;
@@ -771,113 +572,13 @@ textarea.form-control {
     border: 1px solid $gray-500;
 }
 
-// -----------------------------------------------------------------------------
-// Tables
-// -----------------------------------------------------------------------------
-.table {
-    width: 100%;
-    margin-bottom: $spacer;
-    color: $gray-900;
-    vertical-align: top;
-    border-collapse: collapse;
+// Tables → @layer components in tailwind.css
 
-    th,
-    td {
-        padding: 0.5rem 0.5rem;
-        border-bottom: 1px solid $gray-300;
-        text-align: start;
-    }
-    thead th {
-        vertical-align: bottom;
-        border-bottom: 2px solid $gray-300;
-        font-weight: 600;
-    }
-    &.table-hover tbody tr:hover {
-        background-color: $gray-100;
-    }
-}
-.table-light {
-    background-color: $gray-100;
-}
-.table-responsive {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-}
+// Card → @layer components in tailwind.css
 
-// -----------------------------------------------------------------------------
-// Card
-// -----------------------------------------------------------------------------
-.card {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    background-color: $white;
-    border: 1px solid $gray-300;
-    border-radius: $border-radius;
-}
-.card-body {
-    flex: 1 1 auto;
-    padding: $spacer;
-}
-.card-header {
-    padding: calc(#{$spacer} * 0.5) $spacer;
-    border-bottom: 1px solid $gray-300;
-    background-color: $gray-100;
-}
-.card-footer {
-    padding: calc(#{$spacer} * 0.5) $spacer;
-    border-top: 1px solid $gray-300;
-    background-color: $gray-100;
-}
-.card-title {
-    margin-bottom: 0.5rem;
-}
-.card-group {
-    display: flex;
-    flex-direction: column;
-}
+// Badge → @layer components in tailwind.css
 
-// -----------------------------------------------------------------------------
-// Badge
-// -----------------------------------------------------------------------------
-.badge {
-    display: inline-block;
-    padding: 0.35em 0.65em;
-    font-size: 0.75em;
-    font-weight: 700;
-    line-height: 1;
-    color: $white;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: baseline;
-    border-radius: $border-radius;
-}
-@each $name, $color in $theme-colors {
-    .badge.bg-#{$name},
-    .badge.text-bg-#{$name} {
-        background-color: $color;
-        color: if($name == light or $name == warning, $gray-900, $white);
-    }
-}
-
-// -----------------------------------------------------------------------------
-// Alert
-// -----------------------------------------------------------------------------
-.alert {
-    position: relative;
-    padding: $spacer $spacer;
-    margin-bottom: $spacer;
-    border: 1px solid transparent;
-    border-radius: $border-radius;
-}
-@each $name, $color in $theme-colors {
-    .alert-#{$name} {
-        color: shade-color($color, 40%);
-        background-color: tint-color($color, 80%);
-        border-color: tint-color($color, 60%);
-    }
-}
+// Alert → @layer components in tailwind.css
 
 // -----------------------------------------------------------------------------
 // Modal (base; HeadlessUI handles behavior, these style the markup)
@@ -918,50 +619,10 @@ textarea.form-control {
     border-top: 1px solid $gray-300;
 }
 
-// -----------------------------------------------------------------------------
-// Dropdown (base; HeadlessUI Menu handles behavior)
-// -----------------------------------------------------------------------------
-.dropdown-menu {
-    position: absolute;
-    z-index: $zindex-dropdown;
-    display: block;
-    min-width: 10rem;
-    padding: 0.5rem 0;
-    margin: 0;
-    font-size: $font-size-base;
-    color: $gray-900;
-    list-style: none;
-    background-color: $white;
-    border: 1px solid rgba($black, 0.15);
-    border-radius: $border-radius;
-}
-.dropdown-item {
-    display: block;
-    width: 100%;
-    padding: 0.25rem 1rem;
-    clear: both;
-    font-weight: 400;
-    color: $gray-900;
-    text-align: inherit;
-    text-decoration: none;
-    white-space: nowrap;
-    background-color: transparent;
-    border: 0;
-    cursor: pointer;
-    &:hover,
-    &:focus {
-        background-color: $gray-100;
-    }
-}
-.dropdown-divider {
-    height: 0;
-    margin: 0.5rem 0;
-    overflow: hidden;
-    border-top: 1px solid $gray-200;
-}
+// Dropdown → @layer components in tailwind.css
 
 // -----------------------------------------------------------------------------
-// Nav / Navbar
+// Nav / Navbar (kept: used by AppHeader / AppNavigation directly)
 // -----------------------------------------------------------------------------
 .nav {
     display: flex;
@@ -1009,64 +670,11 @@ textarea.form-control {
     list-style: none;
 }
 
-// -----------------------------------------------------------------------------
-// Pagination
-// -----------------------------------------------------------------------------
-.pagination {
-    display: flex;
-    padding-inline-start: 0;
-    list-style: none;
-}
-.page-link {
-    position: relative;
-    display: block;
-    padding: 0.375rem 0.75rem;
-    color: $primary;
-    text-decoration: none;
-    background-color: $white;
-    border: 1px solid $gray-300;
-    cursor: pointer;
-    &:hover {
-        background-color: $gray-100;
-    }
-}
-.page-item.active .page-link {
-    z-index: 1;
-    color: $white;
-    background-color: $primary;
-    border-color: $primary;
-}
-.page-item.disabled .page-link {
-    color: $gray-500;
-    pointer-events: none;
-}
+// Pagination → @layer components in tailwind.css
 
-// -----------------------------------------------------------------------------
-// Progress
-// -----------------------------------------------------------------------------
-.progress {
-    display: flex;
-    height: 1rem;
-    overflow: hidden;
-    font-size: 0.75rem;
-    background-color: $gray-200;
-    border-radius: $border-radius;
-}
-.progress-bar {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    overflow: hidden;
-    color: $white;
-    text-align: center;
-    white-space: nowrap;
-    background-color: $primary;
-    transition: width 0.6s ease;
-}
+// Progress → @layer components in tailwind.css
 
-// -----------------------------------------------------------------------------
-// Spinner
-// -----------------------------------------------------------------------------
+// Spinner (kept: no Tailwind equivalent yet)
 @keyframes spinner-border {
     to {
         transform: rotate(360deg);
@@ -1113,21 +721,9 @@ textarea.form-control {
     word-wrap: break-word;
 }
 
-// -----------------------------------------------------------------------------
-// Dropdown positioning (kit BDropdown)
-// -----------------------------------------------------------------------------
-.dropdown {
-    position: relative;
-}
-.dropdown-menu {
-    inset-inline-start: 0;
-    top: 100%;
-}
-.dropdown-menu-end {
-    inset-inline-start: auto;
-    inset-inline-end: 0;
-}
+// Dropdown positioning → @layer components in tailwind.css
 
+// Nav tabs (kept: not yet fully migrated)
 // -----------------------------------------------------------------------------
 // Nav tabs (kit BTabs)
 // -----------------------------------------------------------------------------
@@ -1153,26 +749,7 @@ textarea.form-control {
     }
 }
 
-// -----------------------------------------------------------------------------
-// List group (kit BListGroup)
-// -----------------------------------------------------------------------------
-.list-group {
-    display: flex;
-    flex-direction: column;
-    padding-inline-start: 0;
-    margin-bottom: 0;
-}
-.list-group-item {
-    position: relative;
-    display: block;
-    padding: 0.5rem 1rem;
-    color: $gray-900;
-    background-color: $white;
-    border: 1px solid rgba($black, 0.125);
-    & + & {
-        border-top-width: 0;
-    }
-}
+// List group → @layer components in tailwind.css
 
 // -----------------------------------------------------------------------------
 // Navbar toggler (kit BNavbarToggle)

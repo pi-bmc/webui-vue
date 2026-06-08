@@ -1,24 +1,5 @@
-.btn {
-    padding-top: calc($spacer / 2);
-    padding-inline-end: $spacer;
-    padding-bottom: calc($spacer / 2);
-    padding-inline-start: $spacer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: space-around;
-    svg {
-        margin-inline-end: calc($spacer / 4);
-    }
-    &:disabled {
-        color: $gray-600;
-        fill: currentColor;
-        box-shadow: none !important;
-        &:not(.btn-link) {
-            border-color: $gray-400;
-            background-color: $gray-400;
-        }
-    }
-}
+// Buttons migrated to @layer components in tailwind.css
+// Only OpenBMC-specific overrides remain below.
 
 .btn-primary {
     fill: currentColor;

@@ -1,7 +1,9 @@
+// Alert base migrated to @layer components in tailwind.css
+// Variant overrides below remain (they override the base).
 .alert {
     display: flex;
     padding: $spacer;
-    border-width: 0 0 0 3px; // keep physical width for browsers; color uses logical start
+    border-width: 0 0 0 3px;
     color: $gray-800;
     margin-bottom: $spacer;
 
