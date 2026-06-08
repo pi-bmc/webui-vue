@@ -22,6 +22,10 @@ const axiosInstance = Axios.create({
   withCredentials: true,
 });
 
+// Exported so the dev-only demo backend (VITE_DEMO_MODE) can attach a mock
+// adapter. Has no effect unless the demo backend is installed from main.js.
+export { axiosInstance };
+
 const api = setupCache(axiosInstance, {
   debug: import.meta.env.DEV ? console.log : undefined,
   methods: ['get'],

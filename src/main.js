@@ -90,4 +90,14 @@ const filter = {
 };
 app.config.globalProperties.$filters = filter;
 
-app.mount('#app');
+// Dev-only demo mode: seed auth + mock Redfish data so the UI runs with no
+// backend. The import is dead-code-eliminated unless VITE_DEMO_MODE=true.
+async function boot() {
+  if (import.meta.env.VITE_DEMO_MODE === 'true') {
+    const { installDemoBackend } = await import('@/mocks/demoBackend');
+    installDemoBackend(store);
+  }
+  app.mount('#app');
+}
+
+boot();
