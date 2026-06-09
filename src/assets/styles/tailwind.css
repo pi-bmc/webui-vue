@@ -433,35 +433,39 @@
     color: var(--color-gray-900);
     border-collapse: collapse;
     position: relative;
-    z-index: 1000;
+    z-index: 1;
+    background-color: #fff;
+    /* Row separators only — no boxy outer/side borders (Carbon-style) */
     td {
-      border-top: 1px solid var(--color-gray-300);
-      border-bottom: 1px solid var(--color-gray-300);
-      padding: 0.5rem;
+      border-bottom: 1px solid var(--color-gray-200);
+      padding: 0.75rem 1rem;
       vertical-align: middle;
       text-align: start;
-      &:first-of-type { border-inline-start: 1px solid var(--color-gray-300); }
-      &:last-of-type { border-inline-end: 1px solid var(--color-gray-300); }
     }
     thead {
       th {
         vertical-align: middle;
         font-weight: 600;
-        padding: 0.5rem;
+        padding: 0.75rem 1rem;
         text-align: start;
-        border-top: 1px solid var(--color-gray-300);
-        border-bottom: 2px solid var(--color-gray-300);
+        background-color: var(--color-gray-100);
+        border-bottom: 1px solid var(--color-gray-300);
         color: var(--color-dark);
-        &:first-of-type { border-inline-start: 1px solid var(--color-gray-300); }
-        &:last-of-type { border-inline-end: 1px solid var(--color-gray-300); }
+        white-space: nowrap;
         &:focus { outline: none; }
       }
     }
+    tbody tr:last-child td { border-bottom: 1px solid var(--color-gray-200); }
     &.table-hover tbody tr:hover { background-color: var(--color-gray-100); }
     @variant dark {
       color: var(--bmc-body-color);
+      background-color: var(--bmc-surface);
       td { border-color: var(--bmc-border); }
-      thead th { border-color: var(--bmc-border-strong); }
+      thead th {
+        background-color: var(--bmc-surface-2);
+        border-color: var(--bmc-border-strong);
+        color: var(--bmc-body-color);
+      }
       &.table-hover tbody tr:hover { background-color: var(--bmc-surface-2); }
     }
   }
@@ -480,15 +484,12 @@
   thead.table-light th,
   .thead-light th {
     color: var(--color-dark);
-    border-top: 1px solid var(--color-gray-300);
     border-bottom: 1px solid var(--color-gray-300);
     vertical-align: middle;
-    &:first-of-type { border-inline-start: 1px solid var(--color-gray-300); }
-    &:last-of-type { border-inline-end: 1px solid var(--color-gray-300); }
     @variant dark {
       color: var(--bmc-body-color) !important;
       background-color: var(--bmc-surface-2) !important;
-      border-color: var(--bmc-border) !important;
+      border-color: var(--bmc-border-strong) !important;
     }
   }
   .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }

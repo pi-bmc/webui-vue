@@ -160,9 +160,9 @@ svg {
   fill: currentColor;
   height: 1.2rem;
   width: 1.2rem;
-  margin-inline-start: 0 !important; //!important overriding button specificity
   vertical-align: text-bottom;
   &:not(.icon-expand) {
+    margin-inline-start: 0 !important; //!important overriding button specificity
     margin-inline-end: $spacer;
   }
 }
@@ -212,14 +212,20 @@ svg {
 }
 
 .icon-expand {
-  float: inline-end;
-  margin-top: calc(#{$spacer} / 4);
+  margin-inline-start: auto !important; // push chevron to the far end of the flex row
 }
 
 .btn-link,
 .nav-link {
   position: relative;
+  // Flex row keeps the icon to the LEFT of the label and vertically centered.
+  // Tailwind preflight sets svg{display:block}, which otherwise stacks the
+  // icon above the text.
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; // override .btn's justify-content:center
   font-weight: normal;
+  padding-block: 0.625rem;
   padding-inline-start: $spacer; // defining consistent padding for links and buttons
   padding-inline-end: $spacer;
   color: theme-color('secondary');

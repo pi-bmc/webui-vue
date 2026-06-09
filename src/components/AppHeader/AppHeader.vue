@@ -323,7 +323,18 @@ export default {
   .btn-link {
     color: $white !important;
     fill: currentColor;
-    padding: 0.68rem 1rem !important;
+    // Inline-flex keeps the status icon to the LEFT of the label and vertically
+    // centered (Tailwind preflight sets svg{display:block}, which otherwise
+    // stacks the icon above the text and overflows the navbar height).
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    height: $header-height;
+    padding: 0 1rem !important;
+
+    svg {
+      margin: 0;
+    }
 
     &:hover {
       background-color: theme-color-level(light, 10);
