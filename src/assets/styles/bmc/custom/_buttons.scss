@@ -23,23 +23,15 @@
     }
 }
 
-// Global style for all button link
+// Global style for all button link.
+// Hover/active/focus states (and their dark-mode variants) are defined in
+// tailwind.css @layer components. Defining them here with static grays
+// (e.g. $gray-200) would override the theme-aware variants and produce a
+// near-white hover background in dark mode. Keep only OpenBMC-specific bits.
 .btn-link {
     font-weight: $headings-font-weight;
     fill: theme-color('primary');
     text-decoration: none !important;
-    &:hover {
-        background-color: $gray-200;
-        color: theme-color('primary');
-    }
-    &:active {
-        background-color: $gray-300;
-    }
-    &:focus {
-        box-shadow: inset 0 0 0 2px theme-color('primary');
-        color: theme-color('primary');
-        outline: none;
-    }
     &:disabled {
         box-shadow: $btn-focus-box-shadow;
     }

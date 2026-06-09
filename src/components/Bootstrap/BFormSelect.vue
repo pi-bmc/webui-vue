@@ -22,6 +22,9 @@
       leave-to-class="opacity-0"
     >
       <h-listbox-options as="ul" class="dropdown-menu listbox-options">
+        <!-- Optional leading option (e.g. a disabled placeholder). Registers
+             itself with this Listbox so its label shows when selected. -->
+        <slot name="first" />
         <h-listbox-option
           v-for="(opt, i) in propOptions"
           :key="i"
@@ -107,7 +110,39 @@ export default {
       const match = this.allOptions.find(
         (o) => o.value === this.modelValue,
       );
-      return match ? match.text : '';
+      if (match) return match.text;
+      // Nothing matched (e.g. placeholder value). The #first slot is only
+      // mounted/registered while the dropdown is open, so fall back to its
+      // rendered text to keep the placeholder label visible when closed.
+      return this.firstSlotText;
+    },
+    firstSlotText() {
+      const slot = this.$slots.first;
+      if (!slot) return '';
+      const text = (nodes) =>
+        (nodes || [])
+          .map((n) => {
+            if (n == null || typeof n === 'boolean') return '';
+            if (typeof n === 'string') return n;
+            if (typeof n.children === 'string') return n.children;
+            if (Array.isArray(n.children)) return text(n.children);
+            // Component vnode (e.g. <b-form-select-option>): recurse into its
+            // default slot to reach the label text.
+            if (n.children && typeof n.children.default === 'function') {
+              try {
+                return text(n.children.default());
+              } catch {
+                return '';
+              }
+            }
+            return '';
+          })
+          .join('');
+      try {
+        return text(slot()).trim();
+      } catch {
+        return '';
+      }
     },
   },
   methods: {
@@ -127,9 +162,15 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+// Not scoped: HeadlessUI's Listbox renders its root (as="div") without Vue's
+// scoped data-v attribute, so a scoped `.b-form-select` selector would not
+// match — leaving the root `position: static` and the absolutely-positioned
+// dropdown anchored to the page instead of the button. The class names below
+// are specific to this component, so global scope is safe.
 .b-form-select {
   position: relative;
+  display: block;
 }
 // The Listbox button replaces a native <select>; keep the select chrome but
 // align text to the start and make room for the chevron.
@@ -142,6 +183,9 @@ export default {
 }
 .listbox-value {
   display: block;
+  // Reserve one line so the button keeps a native <select>'s height even when
+  // nothing is selected (empty text would otherwise collapse the button).
+  min-height: 1.5em;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

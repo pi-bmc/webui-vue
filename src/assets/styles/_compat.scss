@@ -474,21 +474,27 @@ textarea.form-control {
 
 // -----------------------------------------------------------------------------
 // Checks & radios
+// Flex layout (input + label) with an explicit gap. The Bootstrap
+// padding-inline-start + negative input margin trick collapsed to a 0px gap
+// here (checkbox touching its label), so use flex instead.
 .form-check {
-    display: block;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5em;
     min-height: 1.5rem;
-    padding-inline-start: 1.5em;
     margin-bottom: 0.125rem;
 }
 .form-check-inline {
-    display: inline-block;
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 0.5em;
     margin-inline-end: 1rem;
 }
 .form-check-input {
     width: 1em;
     height: 1em;
     margin-top: 0.25em;
-    margin-inline-start: -1.5em;
+    flex: 0 0 auto;
     vertical-align: top;
     background-color: $white;
     border: 1px solid $gray-500;

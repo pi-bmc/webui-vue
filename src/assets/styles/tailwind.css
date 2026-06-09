@@ -200,7 +200,9 @@
     @variant dark {
       &:hover {
         background-color: rgb(255 255 255 / 0.1);
+        color: var(--color-primary);
       }
+      &:active { background-color: rgb(255 255 255 / 0.16); }
     }
   }
 

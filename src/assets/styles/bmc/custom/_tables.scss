@@ -85,7 +85,10 @@
             padding: 0;
         }
         svg {
-            fill: theme-color('dark');
+            // Theme-aware: dark in light mode (unchanged), light in dark mode.
+            // theme-color('dark') is a static #161616 and is invisible on dark
+            // surfaces.
+            fill: var(--bmc-body-color);
         }
     }
     .b-table-sort-icon-left {
