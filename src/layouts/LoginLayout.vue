@@ -48,7 +48,7 @@ export default {
 
 <style lang="scss" scoped>
 .login-container {
-  background: $gray-100;
+  background: var(--bmc-surface-2);
   display: flex;
   flex-direction: column;
   gap: $spacer * 2;
@@ -58,7 +58,7 @@ export default {
   justify-content: space-around;
 
   @include media-breakpoint-up('md') {
-    background: $white;
+    background: var(--bmc-body-bg);
     flex-direction: row;
   }
 }
@@ -72,7 +72,7 @@ export default {
   align-items: center;
 
   @include media-breakpoint-up('md') {
-    background: $gray-100;
+    background: var(--bmc-surface-2);
     flex: 1 1 75%;
     min-height: 100vh;
   }
@@ -107,7 +107,7 @@ export default {
     display: inline-block;
     height: 2.5rem;
     width: 2px;
-    background-color: $gray-200;
+    background-color: var(--bmc-border);
     margin-inline-start: $spacer * 1.5;
     vertical-align: middle;
   }
