@@ -28,12 +28,13 @@ $table-filter-form-margin: calc(#{$spacer} / 4);
     .clear-all-btn {
         color: $primary !important;
 
+        // Neutral hover/active surfaces flip automatically via --bs-secondary-bg.
         &:hover {
-            background-color: $gray-200;
+            background-color: var(--bs-secondary-bg);
         }
 
         &:active {
-            background-color: $gray-300;
+            background-color: var(--bs-secondary-bg);
         }
 
         &:focus {
@@ -76,11 +77,22 @@ $table-filter-form-margin: calc(#{$spacer} / 4);
 
     .form-check:hover,
     .form-check:focus-within {
-        background-color: $gray-200;
+        background-color: var(--bs-secondary-bg);
     }
 
     .filter-checkbox-labels.dropdown-item:hover,
     .filter-checkbox-labels.dropdown-item:focus {
         background-color: transparent !important;
+    }
+}
+
+// Dark mode: only the saturated primary link color needs remapping to the
+// lighter emphasis token. (Neutral hover/active surfaces already flip via
+// var(--bs-secondary-bg).)
+@include color-mode(dark) {
+    .table-filter {
+        .clear-all-btn {
+            color: var(--bs-primary-text-emphasis) !important;
+        }
     }
 }

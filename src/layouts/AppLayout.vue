@@ -113,7 +113,7 @@ export default {
 
 .app-content {
   grid-area: content;
-  background-color: $white;
+  background-color: var(--bs-body-bg);
   min-width: 0;
 }
 </style>

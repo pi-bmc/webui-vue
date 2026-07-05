@@ -11,13 +11,14 @@
     svg {
         margin-inline-end: calc($spacer / 4);
     }
+    // Neutral disabled surface/text use --bs-* tokens so they flip in dark mode.
     &:disabled {
-        color: $gray-600;
+        color: var(--bs-secondary-color);
         fill: currentColor;
         box-shadow: none !important;
         &:not(.btn-link) {
-            border-color: $gray-400;
-            background-color: $gray-400;
+            border-color: var(--bs-secondary-bg);
+            background-color: var(--bs-secondary-bg);
         }
     }
 }
@@ -26,10 +27,11 @@
     fill: currentColor;
     &:focus,
     &:not(:disabled):not(.disabled):active:focus {
-        border-color: $white;
+        // Inner ring uses the page background so it flips light/dark.
+        border-color: var(--bs-body-bg);
         box-shadow:
             inset 0 0 0 3px theme-color('primary'),
-            inset 0 0 0 5px $white;
+            inset 0 0 0 5px var(--bs-body-bg);
     }
 }
 
@@ -37,10 +39,10 @@
     fill: currentColor;
     &:focus,
     &:not(:disabled):not(.disabled):active:focus {
-        border-color: $white;
+        border-color: var(--bs-body-bg);
         box-shadow:
             inset 0 0 0 3px theme-color('secondary'),
-            inset 0 0 0 5px $white;
+            inset 0 0 0 5px var(--bs-body-bg);
     }
 }
 
@@ -50,11 +52,12 @@
     fill: theme-color('primary');
     text-decoration: none !important;
     &:hover {
-        background-color: $gray-200;
+        // Neutral hover/active surfaces flip automatically via --bs-secondary-bg.
+        background-color: var(--bs-secondary-bg);
         color: theme-color('primary');
     }
     &:active {
-        background-color: $gray-300;
+        background-color: var(--bs-secondary-bg);
     }
     &:focus {
         box-shadow: inset 0 0 0 2px theme-color('primary');

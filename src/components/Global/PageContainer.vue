@@ -35,7 +35,7 @@ main {
   padding-inline-end: $spacer;
 
   &:focus-visible {
-    box-shadow: inset 0 0 0 2px theme-color('primary');
+    box-shadow: inset 0 0 0 2px var(--bs-primary);
     outline: none;
   }
 

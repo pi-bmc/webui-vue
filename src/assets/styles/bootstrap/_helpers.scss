@@ -1,3 +1,7 @@
-@import "bootstrap/scss/functions";
-@import "bootstrap/scss/variables";
-@import "bootstrap/scss/mixins";
+@import 'bootstrap/scss/functions';
+// Keep dark-mode strategy consistent with the main stylesheet: color-mode()
+// emits `@media (prefers-color-scheme: dark)` blocks (see bmc/helpers/_variables).
+// Must be set before Bootstrap variables are imported.
+$color-mode-type: media-query;
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins';

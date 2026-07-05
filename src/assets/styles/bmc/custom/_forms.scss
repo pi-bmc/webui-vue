@@ -1,3 +1,8 @@
+// Neutral text/surface/border colors below use Bootstrap 5.3 `--bs-*` tokens so
+// they flip automatically under `@media (prefers-color-scheme: dark)`. Only the
+// checkbox "filled" state (a monochrome black that would swallow its own glyph
+// in dark mode) needs an explicit color-mode(dark) override at the bottom.
+
 // Helper text (Bootstrap 4 and bootstrap-vue-next)
 .form-text,
 .b-form-text {
@@ -6,12 +11,12 @@
     line-height: $form-line-height;
     margin-top: calc(-1 * (#{$spacer} / 4));
     margin-bottom: calc(#{$spacer} / 2);
-    color: $gray-700 !important;
+    color: var(--bs-secondary-color) !important;
 }
 
 // Legend label
 .col-form-label {
-    color: $gray-800;
+    color: var(--bs-body-color);
     font-size: $form-label-font-size;
     line-height: $form-line-height;
 }
@@ -26,8 +31,8 @@
 .form-select,
 .form-control,
 .input-group-text {
-    border-color: $gray-500 !important;
-    background-color: $gray-100;
+    border-color: var(--bs-border-color) !important;
+    background-color: var(--bs-tertiary-bg);
 }
 
 .custom-select,
@@ -38,20 +43,20 @@
     }
 
     &:focus {
-        color: theme-color('dark');
-        background-color: $gray-100;
+        color: var(--bs-body-color);
+        background-color: var(--bs-tertiary-bg);
         box-shadow:
-            inset 0 0 0 3px $gray-100,
+            inset 0 0 0 3px var(--bs-tertiary-bg),
             inset 0 0 0 5px $primary !important;
     }
 
     &:disabled {
-        background-color: $gray-400;
-        color: $gray-600;
+        background-color: var(--bs-secondary-bg);
+        color: var(--bs-secondary-color);
     }
 
     &::placeholder {
-        color: $gray-600;
+        color: var(--bs-secondary-color);
     }
 
     &.is-invalid,
@@ -65,26 +70,26 @@
 .custom-control-label,
 .form-check-label,
 .form-control {
-    color: theme-color('dark') !important;
+    color: var(--bs-body-color) !important;
     font-size: 1rem;
 }
 
 // Inverted form colors
 .form-background {
-    background-color: $gray-100;
+    background-color: var(--bs-tertiary-bg);
 
     .custom-select,
     .form-select,
     .form-control {
-        background-color: $white;
+        background-color: var(--bs-body-bg);
 
         &:focus {
-            background-color: $white;
+            background-color: var(--bs-body-bg);
         }
 
         &:disabled {
-            background-color: $gray-400;
-            color: $gray-600;
+            background-color: var(--bs-secondary-bg);
+            color: var(--bs-secondary-color);
         }
     }
 }
@@ -96,7 +101,7 @@
 
 // Checkbox and radio button styling with backward compatibility
 .form-check .form-check-input {
-    border-color: $gray-500;
+    border-color: var(--bs-border-color);
     cursor: pointer !important;
     background-color: transparent;
 }
@@ -116,12 +121,12 @@
 .form-check {
     .form-check-input:disabled,
     .form-check-input[disabled='disabled'] {
-        background-color: $gray-200;
+        background-color: var(--bs-secondary-bg);
         opacity: 0.5;
 
         & + .form-check-label {
             opacity: 1;
-            color: $gray-600 !important;
+            color: var(--bs-secondary-color) !important;
         }
     }
 }
@@ -136,7 +141,7 @@
             // Disabled label for checkbox, radio,
             // switch bootstrap form components
             opacity: 1;
-            color: $gray-600 !important;
+            color: var(--bs-secondary-color) !important;
         }
     }
 }
@@ -146,7 +151,7 @@
         & + .form-check-label {
             // Disabled label for checkbox, radio,
             // switch bootstrap form components
-            color: $gray-600 !important;
+            color: var(--bs-secondary-color) !important;
         }
     }
 }
@@ -198,4 +203,22 @@
 .form-switch .form-check-input {
     // Override $enable-rounded: false for form switches
     border-radius: 1.5625rem; // 2em equivalent to match Bootstrap 5's $form-switch-border-radius
+}
+
+// Dark mode: the checked/indeterminate state fills the control with a solid
+// black, which disappears against a dark surface (and would hide the light
+// check glyph). Use the primary accent instead — everything else in this file
+// already flips via the --bs-* tokens above.
+@include color-mode(dark) {
+    .form-check .form-check-input:checked {
+        background-color: var(--bs-primary) !important;
+        border-color: var(--bs-primary) !important;
+    }
+
+    .form-check .form-check-input:checked ~ .form-check-label::after,
+    .form-check .form-check-input:indeterminate ~ .form-check-label::before,
+    .form-check-input:checked ~ .form-check-label::before {
+        background-color: var(--bs-primary) !important;
+        border-color: var(--bs-primary) !important;
+    }
 }

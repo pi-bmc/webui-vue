@@ -18,3 +18,12 @@
         margin-bottom: 15px !important;
     }
 }
+
+// Dark mode: map the light success tint to the subtle token.
+@include color-mode(dark) {
+    .card {
+        .bg-success {
+            background-color: var(--bs-success-bg-subtle) !important;
+        }
+    }
+}

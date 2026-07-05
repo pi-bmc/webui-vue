@@ -1,15 +1,18 @@
+// Neutral borders, text and surface fills use Bootstrap 5.3 `--bs-*` tokens so
+// the table flips automatically under `@media (prefers-color-scheme: dark)`.
+// The only accent (the primary focus ring) reads correctly in both themes.
 .table {
     position: relative;
     z-index: $zindex-dropdown;
 
     td {
-        border-top: 1px solid $gray-300;
-        border-bottom: 1px solid $gray-300;
+        border-top: 1px solid var(--bs-border-color);
+        border-bottom: 1px solid var(--bs-border-color);
         &:first-of-type {
-            border-inline-start: 1px solid $gray-300;
+            border-inline-start: 1px solid var(--bs-border-color);
         }
         &:last-of-type {
-            border-inline-end: 1px solid $gray-300;
+            border-inline-end: 1px solid var(--bs-border-color);
         }
         vertical-align: middle;
 
@@ -30,15 +33,15 @@
     .thead-light th,
     .table-light th {
         vertical-align: middle;
-        border-top: 1px solid $gray-300;
-        border-bottom: 1px solid $gray-300;
+        border-top: 1px solid var(--bs-border-color);
+        border-bottom: 1px solid var(--bs-border-color);
         &:first-of-type {
-            border-inline-start: 1px solid $gray-300;
+            border-inline-start: 1px solid var(--bs-border-color);
         }
         &:last-of-type {
-            border-inline-end: 1px solid $gray-300;
+            border-inline-end: 1px solid var(--bs-border-color);
         }
-        color: theme-color('dark');
+        color: var(--bs-body-color);
         &:focus {
             outline: none;
         }
@@ -61,7 +64,7 @@
     }
 
     .b-table-details {
-        background-color: theme-color('light');
+        background-color: var(--bs-tertiary-bg);
         td {
             padding-inline-start: calc(50px + (#{$table-cell-padding-x} * 2));
             padding-inline-end: calc(50px + (#{$table-cell-padding-x} * 2));
@@ -85,7 +88,7 @@
             padding: 0;
         }
         svg {
-            fill: theme-color('dark');
+            fill: var(--bs-body-color);
         }
     }
     .b-table-sort-icon-left {
@@ -96,7 +99,7 @@
             box-shadow: inset 0 0 0 2px theme-color('primary') !important;
         }
         &:hover {
-            background-color: theme-color-dark('light');
+            background-color: var(--bs-secondary-bg);
         }
     }
 }
@@ -108,11 +111,11 @@
 // Table stacked style for small screens (< 576px)
 @include media-breakpoint-down(sm) {
     .b-table-stacked-sm {
-        border: 1px solid $gray-300;
+        border: 1px solid var(--bs-border-color);
 
         tr {
             &:not(:first-child) > td[aria-colindex='1'] {
-                border-top: 1px solid $gray-300;
+                border-top: 1px solid var(--bs-border-color);
                 padding-top: 0.625rem;
             }
 
@@ -129,9 +132,9 @@
 
                 &:before {
                     content: '';
-                    background-color: $gray-200;
+                    background-color: var(--bs-secondary-bg);
                     width: 40%;
-                    border-inline-end: 1px solid $gray-300;
+                    border-inline-end: 1px solid var(--bs-border-color);
                 }
 
                 &:after {
@@ -141,7 +144,9 @@
                 }
 
                 &:nth-child(even)::after {
-                    background-color: $gray-100; // Zebra striping for the row
+                    background-color: var(
+                        --bs-tertiary-bg
+                    ); // Zebra striping for the row
                 }
             }
 

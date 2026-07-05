@@ -24,3 +24,16 @@
     background-color: theme-color-light('info') !important;
     color: theme-color('info') !important;
 }
+
+// Dark mode: map the light info tint to Bootstrap 5.3 subtle/emphasis tokens.
+@include color-mode(dark) {
+    .badge-primary {
+        background-color: var(--bs-info-bg-subtle);
+        color: var(--bs-info-text-emphasis);
+    }
+
+    .text-bg-secondary {
+        background-color: var(--bs-info-bg-subtle) !important;
+        color: var(--bs-info-text-emphasis) !important;
+    }
+}

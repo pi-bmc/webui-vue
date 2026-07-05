@@ -80,7 +80,9 @@ $toolbar-height: 46px;
 
 .toolbar-content {
   height: $toolbar-height;
-  background-color: theme-color('primary');
+  // Always-primary selection bar; --bs-primary carries the custom palette.
+  // The text stays white because it sits on the (always-blue) bar in both themes.
+  background-color: var(--bs-primary);
   color: $white;
   position: absolute;
   left: 0;

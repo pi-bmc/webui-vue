@@ -318,7 +318,7 @@ export default {
 
 <style lang="scss" scoped>
 .setting-section {
-  border-bottom: 1px solid $gray-300;
+  border-bottom: 1px solid var(--bs-border-color);
 }
 .session-timeout {
   align-self: center;

@@ -222,30 +222,34 @@ svg {
   font-weight: normal;
   padding-inline-start: $spacer; // defining consistent padding for links and buttons
   padding-inline-end: $spacer;
-  color: theme-color('secondary');
+  // Neutral link text/hover/focus flip via --bs-* tokens.
+  color: var(--bs-body-color);
 
   &:hover {
-    background-color: theme-color-level(dark, -10.5);
-    color: theme-color('dark');
+    background-color: var(--bs-secondary-bg);
+    color: var(--bs-body-color);
   }
 
   &:focus {
-    background-color: theme-color-level(light, 0);
-    box-shadow: inset 0 0 0 2px theme-color('primary');
-    color: theme-color('dark');
+    background-color: var(--bs-tertiary-bg);
+    box-shadow: inset 0 0 0 2px var(--bs-primary);
+    color: var(--bs-body-color);
     outline: 0;
   }
 
+  // Pressed state uses the inverted "selected" chip (dark chip + light text).
+  // --bs-secondary/--bs-light carry the custom palette (identical in light); the
+  // dark-mode block at the bottom keeps the chip legible on a dark sidebar.
   &:active {
-    background-color: theme-color('secondary');
-    color: $white;
+    background-color: var(--bs-secondary);
+    color: var(--bs-light);
   }
 }
 
 .nav-link--current {
   font-weight: $headings-font-weight;
-  background-color: theme-color('secondary');
-  color: theme-color('light');
+  background-color: var(--bs-secondary);
+  color: var(--bs-light);
   cursor: default;
   box-shadow: none;
 
@@ -256,13 +260,13 @@ svg {
     bottom: 0;
     inset-inline-start: 0;
     width: $nav-indicator-width;
-    background-color: theme-color('primary');
+    background-color: var(--bs-primary);
   }
 
   &:hover,
   &:focus {
-    background-color: theme-color('secondary');
-    color: theme-color('light');
+    background-color: var(--bs-secondary);
+    color: var(--bs-light);
   }
 }
 
@@ -274,10 +278,11 @@ svg {
   inset-inline-start: 0;
   z-index: $zindex-fixed;
   overflow-y: auto;
-  background-color: theme-color('light');
+  // Sidebar surface + edge border flip via --bs-* tokens.
+  background-color: var(--bs-tertiary-bg);
   transform: translateX(-$navigation-width);
   transition: transform $exit-easing--productive $duration--moderate-02;
-  border-inline-end: 1px solid theme-color-level('light', 2.85);
+  border-inline-end: 1px solid var(--bs-border-color);
 
   @include media-breakpoint-down(md) {
     z-index: $zindex-fixed + 2;
@@ -320,6 +325,30 @@ svg {
 
   @include media-breakpoint-up($responsive-layout-bp) {
     display: none;
+  }
+}
+
+// Dark mode: the light-theme "selected" chip is a dark surface with light text,
+// which is too low-contrast against the now-dark sidebar. Lift it to a lighter
+// surface with emphasis text so the active/current item stays legible.
+@include color-mode(dark) {
+  .btn-link,
+  .nav-link {
+    &:active {
+      background-color: var(--bs-secondary-bg);
+      color: var(--bs-emphasis-color);
+    }
+  }
+
+  .nav-link--current {
+    background-color: var(--bs-secondary-bg);
+    color: var(--bs-emphasis-color);
+
+    &:hover,
+    &:focus {
+      background-color: var(--bs-secondary-bg);
+      color: var(--bs-emphasis-color);
+    }
   }
 }
 </style>

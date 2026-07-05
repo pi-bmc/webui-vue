@@ -433,13 +433,14 @@ export default {
       .dropdown-language-item {
         list-style: none;
         padding: 0.25rem 1.5rem 0.5rem;
-        background-color: $gray-100;
+        // Light dropdown panel (opens over page content): flip via --bs-* tokens.
+        background-color: var(--bs-tertiary-bg);
 
         .dropdown-language-label {
           display: block;
           font-size: 0.8125rem;
           font-weight: 600;
-          color: $gray-700;
+          color: var(--bs-secondary-color);
           margin-bottom: 0.375rem;
         }
 
@@ -450,6 +451,16 @@ export default {
         }
       }
     }
+  }
+}
+
+// The header is a persistent dark brand bar (white text / light icons on a dark
+// surface) in BOTH themes by design, so its chrome colors stay fixed rather than
+// flipping to --bs-* tokens. In dark mode the page background also becomes dark
+// (~#161616), so add a bottom separator to keep the header visually distinct.
+@include color-mode(dark) {
+  .app-header .navbar {
+    border-bottom: 1px solid var(--bs-border-color);
   }
 }
 </style>

@@ -28,7 +28,8 @@
     align-items: flex-start;
     background-color: inherit !important; //override specificity
     border: none;
-    color: theme-color('dark') !important; //override specificity
+    // Neutral text: --bs-body-color flips automatically for dark mode.
+    color: var(--bs-body-color) !important; //override specificity
     padding-bottom: calc(#{$spacer} / 4); // spacing between header and body
 }
 
@@ -46,7 +47,7 @@
 }
 
 .toast-body {
-    color: theme-color('dark');
+    color: var(--bs-body-color);
     padding-top: calc(#{$spacer} / 4); // spacing below header
     white-space: pre-line; // Preserve newlines from \n characters
     line-height: 1.6; // Better line spacing for multi-line content and timestamps
@@ -99,7 +100,7 @@
 .toast.text-bg-info,
 .toast.text-bg-danger,
 .toast.text-bg-warning {
-    color: theme-color('dark') !important;
+    color: var(--bs-body-color) !important;
 }
 
 .toast.text-bg-success {
@@ -120,4 +121,37 @@
 .toast.text-bg-warning {
     border-inline-start-color: theme-color('warning') !important;
     background-color: theme-color-light('warning') !important;
+}
+
+// Dark mode: only the saturated variant accents need remapping — swap the
+// light tints/borders for Bootstrap 5.3's subtle tokens. (The toast header/body
+// text already uses var(--bs-body-color), which flips automatically.)
+@include color-mode(dark) {
+    .b-toast-success .toast,
+    .toast.bg-success,
+    .toast.text-bg-success {
+        border-inline-start-color: var(--bs-success-border-subtle) !important;
+        background-color: var(--bs-success-bg-subtle) !important;
+    }
+
+    .b-toast-info .toast,
+    .toast.bg-info,
+    .toast.text-bg-info {
+        border-inline-start-color: var(--bs-info-border-subtle) !important;
+        background-color: var(--bs-info-bg-subtle) !important;
+    }
+
+    .b-toast-danger .toast,
+    .toast.bg-danger,
+    .toast.text-bg-danger {
+        border-inline-start-color: var(--bs-danger-border-subtle) !important;
+        background-color: var(--bs-danger-bg-subtle) !important;
+    }
+
+    .b-toast-warning .toast,
+    .toast.bg-warning,
+    .toast.text-bg-warning {
+        border-inline-start-color: var(--bs-warning-border-subtle) !important;
+        background-color: var(--bs-warning-bg-subtle) !important;
+    }
 }
