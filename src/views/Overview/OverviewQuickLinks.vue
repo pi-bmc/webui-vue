@@ -1,5 +1,5 @@
 <template>
-  <b-card bg-variant="light" border-variant="light">
+  <b-card>
     <b-row class="d-flex justify-content-between align-items-center">
       <b-col sm="6" lg="9" class="mb-2 mt-2">
         <dl>

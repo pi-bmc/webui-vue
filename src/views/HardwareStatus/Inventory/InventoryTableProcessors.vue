@@ -20,7 +20,6 @@
       must-sort
       hover
       responsive="md"
-      thead-class="table-light"
       :sort-by="['health']"
       show-empty
       :items="processors"

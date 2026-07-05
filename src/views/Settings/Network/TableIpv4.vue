@@ -37,7 +37,6 @@
     <b-table
       responsive="md"
       hover
-      thead-class="table-light"
       :fields="ipv4TableFields"
       :items="form.ipv4TableItems"
       :empty-text="$t('global.table.emptyMessage')"

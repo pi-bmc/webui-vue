@@ -45,7 +45,6 @@
           hover
           must-sort
           sticky-header="75vh"
-          thead-class="table-light"
           :sort-by="['status']"
           show-empty
           :items="filteredSensors"

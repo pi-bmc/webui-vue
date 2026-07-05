@@ -1,4 +1,8 @@
 // Override Bootstrap Variables - node_modules/Bootstrap/scss/_variables.scss
+// Emit dark-mode overrides as `@media (prefers-color-scheme: dark)` blocks
+// (via Bootstrap's color-mode() mixin) instead of [data-bs-theme] selectors.
+// Must be set before `@import "bootstrap/scss/variables"`.
+$color-mode-type: media-query;
 // Disable rounded corners globally
 $enable-rounded: false;
 // Also set border-radius variables to 0 for Bootstrap 5 compatibility

@@ -35,7 +35,6 @@
           show-empty
           no-select-on-click
           hover
-          thead-class="table-light"
           :busy="isBusy"
           :fields="fields"
           :items="tableItems"

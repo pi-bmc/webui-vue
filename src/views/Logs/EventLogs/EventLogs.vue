@@ -75,7 +75,6 @@
           sort-icon-left
           hover
           must-sort
-          thead-class="table-light"
           :sort-desc="[true]"
           show-empty
           :sort-by="['id']"

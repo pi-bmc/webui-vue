@@ -80,8 +80,10 @@ $toolbar-height: 46px;
 
 .toolbar-content {
   height: $toolbar-height;
-  background-color: theme-color('primary');
-  color: $white;
+  // Always-primary selection bar; the text stays white because it sits on the
+  // (always-blue) bar in both themes.
+  background-color: var(--bs-primary);
+  color: var(--bs-white);
   position: absolute;
   left: 0;
   right: 0;
@@ -107,7 +109,7 @@ $toolbar-height: 46px;
     left: 0;
     height: 1.5rem;
     width: 1px;
-    background: rgba($white, 0.6);
+    background: rgba(var(--bs-white-rgb), 0.6);
   }
   &:last-child,
   &:first-child {

@@ -2,7 +2,8 @@
     display: flex;
     padding: $spacer;
     border-width: 0 0 0 3px; // keep physical width for browsers; color uses logical start
-    color: $gray-800;
+    // Neutral body text: --bs-body-color auto-flips under prefers-color-scheme.
+    color: var(--bs-body-color);
     margin-bottom: $spacer;
 
     &.small {
@@ -54,26 +55,26 @@
 // Alert variant styles
 .alert {
     &.alert-info {
-        border-inline-start-color: theme-color('info');
-        background-color: theme-color-light('info');
-        fill: theme-color('info');
+        border-inline-start-color: var(--bs-info-border-subtle);
+        background-color: var(--bs-info-bg-subtle);
+        fill: var(--bs-info-text-emphasis);
     }
 
     &.alert-success {
-        border-inline-start-color: theme-color('success');
-        background-color: theme-color-light('success');
-        fill: theme-color('success');
+        border-inline-start-color: var(--bs-success-border-subtle);
+        background-color: var(--bs-success-bg-subtle);
+        fill: var(--bs-success-text-emphasis);
     }
 
     &.alert-danger {
-        border-inline-start-color: theme-color('danger');
-        background-color: theme-color-light('danger');
-        fill: theme-color('danger');
+        border-inline-start-color: var(--bs-danger-border-subtle);
+        background-color: var(--bs-danger-bg-subtle);
+        fill: var(--bs-danger-text-emphasis);
     }
 
     &.alert-warning {
-        border-inline-start-color: theme-color('warning');
-        background-color: theme-color-light('warning');
-        fill: theme-color('warning');
+        border-inline-start-color: var(--bs-warning-border-subtle);
+        background-color: var(--bs-warning-bg-subtle);
+        fill: var(--bs-warning-text-emphasis);
     }
 }

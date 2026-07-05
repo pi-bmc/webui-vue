@@ -37,7 +37,6 @@
           no-select-on-click
           hover
           show-empty
-          thead-class="table-light"
           :sort-by="['sessionID']"
           :busy="isBusy"
           :fields="fields"

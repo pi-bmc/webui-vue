@@ -299,9 +299,11 @@ export default {
 .active-image-name {
   display: flex;
   align-items: center;
-  background-color: var(--bs-light, #f8f9fa);
-  border: 1px solid var(--bs-border-color, #dee2e6);
-  border-radius: 0.375rem;
+  // Neutral surface/border tokens flip automatically in dark mode
+  // (--bs-light would stay light). No fallbacks needed — Bootstrap always
+  // defines these at :root. Square corners per global $enable-rounded: false.
+  background-color: var(--bs-tertiary-bg);
+  border: 1px solid var(--bs-border-color);
   padding: 0.75rem;
   margin-top: 0.5rem;
   font-size: 0.875rem;
@@ -313,7 +315,9 @@ export default {
 }
 
 .active-external-session {
-  color: var(--bs-secondary, #6c757d);
+  // Muted text token (flips in dark mode); --bs-secondary is the button theme
+  // color, not a text color.
+  color: var(--bs-secondary-color);
   font-size: 0.875rem;
   margin-top: 0.5rem;
 }

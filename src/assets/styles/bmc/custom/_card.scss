@@ -1,6 +1,9 @@
 .card {
+    --bs-card-bg: var(--bs-tertiary-bg);
+    --bs-card-spacer-y: 1.1rem;
+    --bs-card-spacer-x: 1.2rem;
     .bg-success {
-        background-color: theme-color-light('success') !important;
+        background-color: var(--bs-success-bg-subtle);
     }
 }
 

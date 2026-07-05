@@ -11,7 +11,6 @@
         <b-table
           responsive="md"
           hover
-          thead-class="table-light"
           :fields="dnsTableFields"
           :items="form.dnsStaticTableItems"
           :empty-text="$t('global.table.emptyMessage')"

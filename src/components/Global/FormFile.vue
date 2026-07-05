@@ -29,7 +29,6 @@
     <div v-if="file" class="clear-selected-file px-3 py-2 mt-2">
       {{ file ? file.name : '' }}
       <b-button
-        variant="light"
         class="px-2 ms-auto"
         :disabled="disabled"
         @click="file = null"
@@ -151,23 +150,25 @@ export default {
 }
 
 .add-file-btn {
+  // Neutral disabled surface/text flip via --bs-* tokens.
   &.disabled {
-    border-color: $gray-400;
-    background-color: $gray-400;
-    color: $gray-600;
+    border-color: var(--bs-secondary-bg);
+    background-color: var(--bs-secondary-bg);
+    color: var(--bs-secondary-color);
     box-shadow: none !important;
   }
   &:focus {
+    // Inner ring uses the page background so it flips light/dark.
     box-shadow:
-      inset 0 0 0 3px theme-color('primary'),
-      inset 0 0 0 5px $white;
+      inset 0 0 0 3px var(--bs-primary),
+      inset 0 0 0 5px var(--bs-body-bg);
   }
 }
 
 .clear-selected-file {
   display: flex;
   align-items: center;
-  background-color: theme-color('light');
+  background-color: var(--bs-tertiary-bg);
   word-break: break-all;
   .btn {
     width: 36px;
@@ -176,7 +177,7 @@ export default {
     align-items: center;
 
     &:focus {
-      box-shadow: inset 0 0 0 2px theme-color('primary');
+      box-shadow: inset 0 0 0 2px var(--bs-primary);
     }
   }
 }

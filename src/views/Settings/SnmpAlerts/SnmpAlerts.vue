@@ -27,7 +27,6 @@
           show-empty
           no-select-on-click
           hover
-          thead-class="table-light"
           :fields="fields"
           :items="tableItems"
           :empty-text="$t('global.table.emptyMessage')"

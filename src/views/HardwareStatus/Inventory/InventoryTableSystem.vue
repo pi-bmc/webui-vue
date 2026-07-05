@@ -4,7 +4,6 @@
       responsive="md"
       hover
       show-empty
-      thead-class="table-light"
       :items="systems"
       :fields="fields"
       :empty-text="$t('global.table.emptyMessage')"

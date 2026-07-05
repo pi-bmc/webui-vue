@@ -38,24 +38,43 @@ export default {
   vertical-align: text-bottom;
 
   &.info {
-    color: theme-color('info');
+    color: var(--bs-info);
   }
   &.success {
-    color: theme-color('success');
+    color: var(--bs-success);
   }
   &.danger {
-    color: theme-color('danger');
+    color: var(--bs-danger);
   }
   &.secondary {
-    color: $gray-600;
+    color: var(--bs-secondary-color);
     transform: rotate(-45deg);
   }
   &.warning {
-    color: theme-color('warning');
+    color: var(--bs-warning);
   }
 
   svg {
     fill: currentColor;
+  }
+}
+
+// Dark mode: the base status colors (dark green especially) are low-contrast on
+// a dark surface — use the lighter text-emphasis tokens instead.
+@include color-mode(dark) {
+  .status-icon {
+    &.info {
+      color: var(--bs-info-text-emphasis);
+    }
+    &.success {
+      color: var(--bs-success-text-emphasis);
+    }
+    &.danger {
+      color: var(--bs-danger-text-emphasis);
+    }
+    &.warning {
+      color: var(--bs-warning-text-emphasis);
+    }
   }
 }
 </style>

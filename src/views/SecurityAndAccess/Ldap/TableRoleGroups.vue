@@ -39,7 +39,6 @@
           hover
           must-sort
           sort-icon-left
-          thead-class="table-light"
           :busy="isBusy"
           :items="tableItems"
           :fields="fields"

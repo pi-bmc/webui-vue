@@ -90,6 +90,7 @@ export default {
   }
 }
 .progress-bar {
-  background-color: $loading-color;
+  // Primary accent.
+  background-color: var(--bs-primary);
 }
 </style>

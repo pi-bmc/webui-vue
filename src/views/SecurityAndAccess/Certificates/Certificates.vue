@@ -57,7 +57,6 @@
           responsive="md"
           show-empty
           hover
-          thead-class="table-light"
           :busy="isBusy"
           :fields="fields"
           :items="tableItems"

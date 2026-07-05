@@ -3,7 +3,6 @@
     stacked="sm"
     hover
     small
-    thead-class="table-light"
     :items="items"
     :fields="fields"
   >

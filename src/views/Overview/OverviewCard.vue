@@ -1,5 +1,5 @@
 <template>
-  <b-card bg-variant="light" border-variant="light" class="mb-4">
+  <b-card class="mb-4">
     <div class="justify-content-between align-items-center d-flex flex-wrap">
       <h3 class="h5 mb-0">{{ title }}</h3>
       <div class="card-buttons">

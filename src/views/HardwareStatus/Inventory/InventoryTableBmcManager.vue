@@ -3,7 +3,6 @@
     <b-table
       responsive="md"
       hover
-      thead-class="table-light"
       :items="items"
       :fields="fields"
       show-empty

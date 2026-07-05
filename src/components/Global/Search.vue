@@ -84,7 +84,8 @@ export default {
   inset-inline-start: 10px;
   top: 0.5px;
   z-index: $zindex-dropdown + 1;
-  stroke: $gray-400;
+  // Neutral icon stroke: --bs-secondary-color flips for dark mode.
+  stroke: var(--bs-secondary-color);
 }
 .group-text {
   position: absolute;

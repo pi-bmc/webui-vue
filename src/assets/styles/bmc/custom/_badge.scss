@@ -16,11 +16,13 @@
 }
 
 .badge-primary {
-    background-color: theme-color-light('info');
-    color: theme-color('info');
+    background-color: var(--bs-info-bg-subtle);
+    color: var(--bs-info-text-emphasis);
 }
 
 .text-bg-secondary {
-    background-color: theme-color-light('info') !important;
-    color: theme-color('info') !important;
+    background-color: var(--bs-info-bg-subtle) !important;
+    color: var(--bs-info-text-emphasis) !important;
 }
+// No color-mode(dark) block needed: the subtle/emphasis tokens above flip
+// automatically under prefers-color-scheme.

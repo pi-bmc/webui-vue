@@ -276,7 +276,10 @@ export default {
 </script>
 
 <style lang="scss">
-@mixin focus-box-shadow($padding-color: $navbar-color, $outline-color: $white) {
+@mixin focus-box-shadow(
+  $padding-color: var(--bs-dark),
+  $outline-color: var(--bs-white)
+) {
   box-shadow:
     inset 0 0 0 3px $padding-color,
     inset 0 0 0 5px $outline-color;
@@ -296,15 +299,17 @@ export default {
   .navbar-text,
   .nav-link,
   .btn-link {
-    color: $white !important;
+    // Fixed white on the dark brand bar in both themes (--bs-white never flips;
+    // --bs-link-color would render blue and flip in dark mode).
+    color: var(--bs-white) !important;
     fill: currentColor;
     padding: 0.68rem 1rem !important;
 
     &:hover {
-      background-color: theme-color-level(light, 10);
+      background-color: color-mix(in srgb, var(--bs-light) 20%, black);
     }
     &:active {
-      background-color: theme-color-level(light, 9);
+      background-color: color-mix(in srgb, var(--bs-light) 28%, black);
     }
     &:focus {
       @include focus-box-shadow;
@@ -313,19 +318,19 @@ export default {
   }
 
   .nav-item {
-    fill: theme-color('light');
+    fill: var(--bs-light);
   }
 
   .navbar {
     padding: 0;
-    background-color: $navbar-color;
+    background-color: var(--bs-dark);
     @include media-breakpoint-up($responsive-layout-bp) {
       height: $header-height;
     }
 
     .helper-menu {
       @include media-breakpoint-down(sm) {
-        background-color: $gray-800;
+        background-color: var(--bs-gray-800);
         width: 100%;
         justify-content: flex-end;
 
@@ -336,13 +341,35 @@ export default {
 
         .nav-link:focus,
         .btn:focus {
-          @include focus-box-shadow($gray-800);
+          @include focus-box-shadow(var(--bs-gray-800));
         }
       }
 
       .responsive-text {
         @include media-breakpoint-down(sm) {
           @include visually-hidden;
+        }
+      }
+
+      // The header bar is dark in BOTH themes, so status icons always use the
+      // light (dark-mode) emphasis tints — their default colors are too dark
+      // on this surface in light mode. Compile-time values are intentional:
+      // there is no always-available CSS var for the dark-mode tints.
+      .status-icon {
+        &.info {
+          color: $info-text-emphasis-dark;
+        }
+        &.success {
+          color: $success-text-emphasis-dark;
+        }
+        &.danger {
+          color: $danger-text-emphasis-dark;
+        }
+        &.warning {
+          color: $warning-text-emphasis-dark;
+        }
+        &.secondary {
+          color: $secondary-text-emphasis-dark;
         }
       }
     }
@@ -359,7 +386,7 @@ export default {
       transition: $focus-transition;
     }
     .nav-tags {
-      color: theme-color-level(light, 3);
+      color: var(--bs-light);
       @include media-breakpoint-down(sm) {
         @include visually-hidden;
       }
@@ -372,7 +399,7 @@ export default {
   }
 
   .nav-trigger {
-    fill: theme-color('light');
+    fill: var(--bs-navbar-disabled-color);
     width: $header-height;
     height: $header-height;
     transition: none;
@@ -385,12 +412,12 @@ export default {
     }
 
     &:hover {
-      fill: theme-color('light');
-      background-color: theme-color-level(light, 10);
+      fill: var(--bs-light);
+      background-color: color-mix(in srgb, var(--bs-light) 20%, black);
     }
 
     &.open {
-      background-color: $gray-800;
+      background-color: var(--bs-gray-800);
     }
 
     @include media-breakpoint-up($responsive-layout-bp) {
@@ -418,9 +445,9 @@ export default {
   height: $header-height;
   line-height: 1;
   &:focus {
-    box-shadow:
-      inset 0 0 0 3px $navbar-color,
-      inset 0 0 0 5px $white;
+    // Ring padding must match the header background (--bs-navbar-color is a
+    // text-color token, not the bar surface).
+    @include focus-box-shadow;
     outline: 0;
   }
 }
@@ -433,13 +460,14 @@ export default {
       .dropdown-language-item {
         list-style: none;
         padding: 0.25rem 1.5rem 0.5rem;
-        background-color: $gray-100;
+        // Light dropdown panel (opens over page content): flip via --bs-* tokens.
+        background-color: var(--bs-tertiary-bg);
 
         .dropdown-language-label {
           display: block;
           font-size: 0.8125rem;
           font-weight: 600;
-          color: $gray-700;
+          color: var(--bs-tertiary-color);
           margin-bottom: 0.375rem;
         }
 
@@ -450,6 +478,17 @@ export default {
         }
       }
     }
+  }
+}
+
+// The header is a persistent dark brand bar (white text / light icons on a dark
+// surface) in BOTH themes by design, so its chrome uses only non-flipping tokens
+// (--bs-dark, --bs-white, --bs-light, --bs-gray-*). In dark mode the page
+// background also becomes dark, so add a bottom separator to keep the header
+// visually distinct.
+@include color-mode(dark) {
+  .app-header .navbar {
+    border-bottom: 1px solid var(--bs-border-color);
   }
 }
 </style>

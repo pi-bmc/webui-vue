@@ -1,3 +1,4 @@
 .section-divider {
-    border-bottom: 1px solid $gray-400;
-  }
+    // Neutral border: --bs-border-color flips for dark mode.
+    border-bottom: 1px solid var(--bs-border-color);
+}

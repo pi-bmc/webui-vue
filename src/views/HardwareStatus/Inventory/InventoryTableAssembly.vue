@@ -5,7 +5,6 @@
       must-sort
       hover
       responsive="md"
-      thead-class="table-light"
       :items="items"
       :fields="fields"
       show-empty

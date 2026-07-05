@@ -18,7 +18,6 @@
       sort-icon-left
       must-sort
       hover
-      thead-class="table-light"
       :sort-by="['health']"
       responsive="md"
       show-empty

@@ -21,9 +21,11 @@
     }
 
     .page-item.active button {
-        color: $dark;
-        background-color: $white;
-        border-color: $border-color;
-        box-shadow: inset 0px -3px $primary;
+        // Neutral text/surface/border use --bs-* tokens so they flip in dark
+        // mode; the primary underline is an accent that reads in both themes.
+        color: var(--bs-body-color);
+        background-color: var(--bs-body-bg);
+        border-color: var(--bs-border-color);
+        box-shadow: inset 0px -3px var(--bs-primary);
     }
 }

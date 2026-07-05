@@ -51,7 +51,6 @@
             hover
             sort-icon-left
             must-sort
-            thead-class="table-light"
             :sort-desc="[true]"
             selectable
             no-select-on-click
